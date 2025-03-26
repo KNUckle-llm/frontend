@@ -11,9 +11,27 @@ const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
     <nav
       className={`flex flex-col justify-between items-center transition-all duration-300 ${openStyle} h-full bg-neutral-100 py-2 px-1`}
     >
-      <div className={"my-4 w-12 h-12 bg-neutral-300 rounded-full "}></div>
+      <div
+        className={
+          "w-full flex py-4 border-b justify-center gap-4 items-center"
+        }
+      >
+        <div className={"my-4 w-12 h-12 bg-neutral-300 rounded-full "}></div>
+        {isOpen && (
+          <span className={"text-nowrap  text-2xl font-light"}>KNUckle</span>
+        )}
+      </div>
       {isOpen && (
-        <div className={"w-full px-2 py-4"}>
+        <div className={"flex flex-col gap-4 w-full px-2 py-4"}>
+          <Button
+            variant={"default"}
+            className={
+              "bg-neutral-100 border hover:shadow-lg  w-full hover:bg-neutral-100 hover:cursor-pointer text-black"
+            }
+          >
+            <MessageSquareText />
+            이전 대화
+          </Button>
           <Button
             variant={"default"}
             className={

@@ -19,6 +19,7 @@ const QuestionInput = ({
   return (
     <div className={"relative group"}>
       <input
+        value={inputText}
         onSubmit={onSubmit}
         onChange={(e) => setInputText(e.target.value)}
         onFocus={() => setIsFocused(true)}

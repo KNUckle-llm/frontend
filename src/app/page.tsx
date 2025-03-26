@@ -5,7 +5,14 @@ import SidebarLayout from "@/app/entities/layout/SidebarLayout";
 
 export default function Home() {
   const [isFocused, setIsFocused] = useState(false);
-
+  const [isThinking, setIsThinking] = useState(false);
+  const onSubmit = () => {
+    console.log("query send");
+    setIsThinking(true);
+    const timeout = setTimeout(() => {
+      setIsThinking(false);
+    }, 2000);
+  };
   return (
     <section className={"w-full h-screen"}>
       <SidebarLayout>
@@ -16,7 +23,8 @@ export default function Home() {
           <QuestionInput
             isFocused={isFocused}
             setIsFocused={setIsFocused}
-            thinking={false}
+            thinking={isThinking}
+            onSubmit={onSubmit}
           />
         </div>
       </SidebarLayout>
