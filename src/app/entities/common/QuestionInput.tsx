@@ -1,30 +1,31 @@
 "use client";
 import { CircleDashed, CornerRightUp } from "lucide-react";
-import { useState } from "react";
+import { FormEventHandler, useState } from "react";
 
 interface QuestionInputProps {
   isFocused: boolean;
   setIsFocused: (isFocused: boolean) => void;
   thinking?: boolean;
-  onSubmit?: () => void;
+  onSubmit?: FormEventHandler<HTMLFormElement>;
+  inputText: string;
+  setInputText: (inputText: string) => void;
 }
 const QuestionInput = ({
   isFocused,
   setIsFocused,
   thinking,
   onSubmit,
+  inputText,
+  setInputText,
 }: QuestionInputProps) => {
-  const [inputText, setInputText] = useState("");
-
   return (
-    <div className={"relative group"}>
+    <form onSubmit={onSubmit} className={"relative group"}>
       <input
         value={inputText}
-        onSubmit={onSubmit}
         onChange={(e) => setInputText(e.target.value)}
         onFocus={() => setIsFocused(true)}
         className={`w-[480px] h-12 rounded-lg group border p-2 outline-0  focus:px-6 focus:w-[520px] focus:h-16 transition-all duration-300 outline-neutral-300 focus:border-neutral-900  focus:text-xl`}
-        placeholder={"무엇이든 질문하기..."}
+        placeholder={thinking ? "생각 중이에요.." : "무엇이든 질문하기..."}
       />
       <button
         className={
@@ -37,7 +38,7 @@ const QuestionInput = ({
           <CornerRightUp size={12} />
         )}
       </button>
-    </div>
+    </form>
   );
 };
 
