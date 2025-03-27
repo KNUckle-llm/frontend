@@ -5,6 +5,7 @@ import SidebarLayout from "@/app/entities/layout/SidebarLayout";
 import { useRouter } from "next/navigation";
 import QuestionThread from "@/app/entities/thread/QuestionThread";
 import { useScrollStore } from "@/app/store/useScrollStore";
+import axios from "axios";
 
 interface IChatResponse {
   title: string;
