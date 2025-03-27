@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRightFromLine, MessageSquareText } from "lucide-react";
+import Image from "next/image";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -16,7 +17,13 @@ const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
           "w-full flex py-4 border-b justify-center gap-4 items-center"
         }
       >
-        <div className={"my-4 w-12 h-12 bg-neutral-300 rounded-full "}></div>
+        <Image
+          src={"/assets/logo.png"}
+          width={300}
+          height={300}
+          alt={"로고"}
+          className={"my-4 w-12 h-12 bg-neutral-300 rounded-full "}
+        ></Image>
         {isOpen && (
           <span className={"text-nowrap  text-2xl font-light"}>KNUckle</span>
         )}

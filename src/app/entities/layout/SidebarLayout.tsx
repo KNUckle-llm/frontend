@@ -11,7 +11,11 @@ const SidebarLayout = ({ children }: SidebarLayoutProps) => {
   return (
     <div className={"flex bg-neutral-100 h-full"}>
       <Sidebar isOpen={isOpen} setIsOpen={setIsOpen} />
-      <main className={"shadow-lg flex-grow rounded-md ml-0 m-2 bg-white"}>
+      <main
+        className={
+          "overflow-y-scroll shadow-lg flex-grow rounded-md ml-0 m-2 bg-white"
+        }
+      >
         {children}
       </main>
     </div>
