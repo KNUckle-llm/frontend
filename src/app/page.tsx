@@ -4,6 +4,7 @@ import QuestionInput from "@/app/entities/common/QuestionInput";
 import SidebarLayout from "@/app/entities/layout/SidebarLayout";
 import { useRouter } from "next/navigation";
 import QuestionThread from "@/app/entities/thread/QuestionThread";
+import { useScrollStore } from "@/app/store/useScrollStore";
 
 interface IChatResponse {
   title: string;
@@ -19,6 +20,17 @@ export default function Home() {
   const [copyComplete, setCopyComplete] = useState(false);
 
   const router = useRouter();
+  const mainRef = useScrollStore((state) => state.mainRef);
+
+  const scrollToBottom = () => {
+    if (mainRef && mainRef.current) {
+      console.log("asdfas");
+      mainRef.current?.scrollTo({
+        top: mainRef.current.scrollHeight,
+        behavior: "smooth",
+      });
+    }
+  };
 
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -38,8 +50,6 @@ export default function Home() {
       setIsThinking(false);
     }, 2000);
   };
-
-  useEffect(() => {}, []);
 
   const copyToClipboard = (content: string) => {
     navigator.clipboard.writeText(content || "").then(() => {
@@ -65,12 +75,6 @@ export default function Home() {
       },
     ]);
 
-    window.scrollBy({
-      top: 100,
-      left: 100,
-      behavior: "smooth",
-    });
-
     const timeout = setTimeout(() => {
       setIsThinking(false);
     }, 2000);
@@ -82,7 +86,10 @@ export default function Home() {
         {result ? (
           <QuestionThread
             result={result}
-            onComplete={() => setShowAction(true)}
+            onComplete={() => {
+              setShowAction(true);
+              scrollToBottom();
+            }}
             showAction={showAction}
             copyComplete={copyComplete}
             onClick={copyToClipboard}

@@ -1,6 +1,7 @@
 "use client";
-import { useState } from "react";
+import { Ref, useEffect, useRef, useState } from "react";
 import Sidebar from "@/app/entities/common/Sidebar";
+import { useScrollStore } from "@/app/store/useScrollStore";
 
 interface SidebarLayoutProps {
   children: React.ReactNode;
@@ -8,16 +9,18 @@ interface SidebarLayoutProps {
 
 const SidebarLayout = ({ children }: SidebarLayoutProps) => {
   const [isOpen, setIsOpen] = useState(false);
-  const mainRef = useRef<HTMLElement>(null);
+  const mainRef = useRef<HTMLDivElement>(null);
+  const setMainRef = useScrollStore((state) => state.setMainRef);
 
-  const scrollToPosition = () => {
-    if (mainRef.current) {
-      mainRef.current.scrollTo({
-        top: 200,
-        behavior: "smooth",
-      });
+  // 컴포넌트 마운트 시 ref를 스토어에 설정
+  useEffect(() => {
+    if (mainRef) {
+      setMainRef(mainRef);
     }
-  };
+
+    // 언마운트 시 ref 정리
+    return () => setMainRef(null);
+  }, [setMainRef]);
 
   return (
     <div className={"flex bg-neutral-100 h-full"}>

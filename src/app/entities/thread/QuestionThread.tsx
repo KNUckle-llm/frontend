@@ -2,6 +2,7 @@ import AnimatedText from "@/app/entities/common/AnimatedText";
 import { Button } from "@/components/ui/button";
 import { BookMarked, Copy, CopyCheck, Plus, Share } from "lucide-react";
 import { FormEvent, useRef } from "react";
+import { useScrollStore } from "@/app/store/useScrollStore";
 
 interface IChatResponse {
   title: string;
@@ -26,7 +27,7 @@ const QuestionThread = (props: {
     <div
       key={idx}
       className={
-        "max-w-5xl mx-auto w-full flex flex-col items-start justify-start p-10 mb-8"
+        "max-w-5xl mx-auto w-full min-h-[200px] flex flex-col items-start justify-start p-10 mb-8"
       }
     >
       <h1
@@ -57,7 +58,11 @@ const QuestionThread = (props: {
             </Button>
           </div>
           {idx === props.result.length - 1 && (
-            <div className={"mb-12 transition animate-in duration-500 fade-in"}>
+            <div
+              className={
+                "min-h-[240px] mb-12 transition animate-in duration-500 fade-in"
+              }
+            >
               <h3 className={"inline-flex items-center font-bold gap-2 mt-8"}>
                 <BookMarked size={20} />
                 관련
