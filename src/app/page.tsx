@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import QuestionThread from "@/app/entities/thread/QuestionThread";
 import { useScrollStore } from "@/app/store/useScrollStore";
 import axios from "axios";
+import Footer from "@/app/entities/common/Footer";
 
 interface IChatResponse {
   title: string;
@@ -107,6 +108,7 @@ export default function Home() {
               inputText={inputText}
               setInputText={setInputText}
             />
+            <Footer />
           </div>
         )}
       </SidebarLayout>
