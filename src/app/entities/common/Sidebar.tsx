@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import {
   ArrowRightFromLine,
+  Book,
   House,
   MessageSquareText,
   Settings,
@@ -15,6 +16,17 @@ interface SidebarProps {
 }
 const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
   const openStyle = isOpen ? "w-64" : "w-18";
+  const routes = [
+    { name: "홈", path: "/", icon: <House size={20} /> },
+    { name: "소식", path: "/news", icon: <MessageSquareText size={20} /> },
+    {
+      name: "라이브러리",
+      path: "/threads",
+      icon: <Book size={20} />,
+    },
+    { name: "설정", path: "/settings", icon: <Settings size={20} /> },
+  ];
+
   return (
     <nav
       className={`flex flex-col justify-between items-center flex-shrink-0 transition-all duration-300 ${openStyle} h-full bg-neutral-100 py-2 px-1`}
@@ -41,28 +53,23 @@ const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
         >
           <button
             className={
-              "m-2 p-2 bg-white border hover:border-amber-800 rounded-lg"
+              "m-2 p-2 bg-white border hover:border-amber-800 rounded-lg hover:cursor-pointer"
             }
           >
             새로운 스레드
           </button>
-          <Link
-            href={"/"}
-            className={
-              "inline-flex items-center gap-4 p-2 border-none w-full bg-neutral-100 border hover:shadow-lg hover:bg-neutral-100 hover:cursor-pointer  justify-start border-t-0 border-x-0 shadow-none border-b shadow-gray-200 hover:bg-neutral-200/50 rounded-lg "
-            }
-          >
-            <House />홈
-          </Link>
-          <Link
-            href={"/settings"}
-            className={
-              "inline-flex items-center gap-4 p-2 border-none w-full bg-neutral-100 border hover:shadow-lg hover:bg-neutral-100 hover:cursor-pointer  justify-start border-t-0 border-x-0 shadow-none border-b shadow-gray-200 hover:bg-neutral-200/50 rounded-lg "
-            }
-          >
-            <Settings />
-            설정
-          </Link>
+          {routes.map((route) => (
+            <Link
+              key={route.path}
+              href={route.path}
+              className={
+                "inline-flex items-center gap-4 p-2 border-none w-full bg-neutral-100 border hover:shadow-lg hover:bg-neutral-100 hover:cursor-pointer  justify-start border-t-0 border-x-0 shadow-none border-b shadow-gray-200 hover:bg-neutral-200/50 rounded-lg "
+              }
+            >
+              {route.icon}
+              {route.name}
+            </Link>
+          ))}
         </div>
       )}
       <div
