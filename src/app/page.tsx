@@ -1,9 +1,7 @@
 "use client";
-import { FormEvent, FormEventHandler, useEffect, useState } from "react";
+import { FormEvent, useState } from "react";
 import QuestionInput from "@/app/entities/common/QuestionInput";
-import SidebarLayout from "@/app/entities/layout/SidebarLayout";
 import { useRouter } from "next/navigation";
-import QuestionThread from "@/app/entities/thread/QuestionThread";
 import { useScrollStore } from "@/app/store/useScrollStore";
 import axios from "axios";
 import Footer from "@/app/entities/common/Footer";
@@ -87,35 +85,17 @@ export default function Home() {
   };
 
   return (
-    <section className={"w-full h-screen"}>
-      <SidebarLayout>
-        {result ? (
-          <QuestionThread
-            result={result}
-            onComplete={() => {
-              setShowAction(true);
-              scrollToBottom();
-            }}
-            showAction={showAction}
-            copyComplete={copyComplete}
-            onClick={copyToClipboard}
-            onClickRelative={onClickRelative}
-          />
-        ) : (
-          <div className={"h-full flex flex-col items-center justify-center"}>
-            <h1 className={"text-4xl font-extralight mb-8"}>환영합니다.</h1>
-            <QuestionInput
-              isFocused={isFocused}
-              setIsFocused={setIsFocused}
-              thinking={isThinking}
-              onSubmit={onSubmit}
-              inputText={inputText}
-              setInputText={setInputText}
-            />
-            <Footer />
-          </div>
-        )}
-      </SidebarLayout>
-    </section>
+    <div className={"h-full flex flex-col items-center justify-center"}>
+      <h1 className={"text-4xl font-extralight mb-8"}>환영합니다.</h1>
+      <QuestionInput
+        isFocused={isFocused}
+        setIsFocused={setIsFocused}
+        thinking={isThinking}
+        onSubmit={onSubmit}
+        inputText={inputText}
+        setInputText={setInputText}
+      />
+      <Footer />
+    </div>
   );
 }
