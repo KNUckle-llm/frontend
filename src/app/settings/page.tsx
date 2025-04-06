@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { Settings, ChevronLeft, User, MessageSquare } from "lucide-react";
+import { ChevronLeft } from "lucide-react";
 
 const SettingsPage = () => {
   const [nickname, setNickname] = useState("");

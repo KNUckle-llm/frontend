@@ -1,5 +1,5 @@
 "use client";
-import { Ref, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Sidebar from "@/app/entities/common/Sidebar";
 import { useScrollStore } from "@/app/store/useScrollStore";
 
@@ -23,12 +23,12 @@ const SidebarLayout = ({ children }: SidebarLayoutProps) => {
   }, [setMainRef]);
 
   return (
-    <div className={"flex bg-neutral-100 h-full"}>
+    <div className={"flex bg-neutral-100 h-full w-full overflow-hidden"}>
       <Sidebar isOpen={isOpen} setIsOpen={setIsOpen} />
       <main
         ref={mainRef}
         className={
-          "overflow-y-scroll shadow-lg flex-grow rounded-md ml-0 m-2 bg-white"
+          "flex-1 min-w-0 overflow-y-scroll overflow-x-hidden  shadow-lg flex-grow rounded-md ml-0 m-2 bg-white"
         }
       >
         {children}
