@@ -34,23 +34,27 @@ export default function Home() {
     }
   };
 
-  const onSubmit = (e: FormEvent) => {
+  const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (!inputText) return;
     console.log("query send");
+    const response = await axios.post("/api/search", { inputText });
     setIsThinking(true);
-    setResult([
-      {
-        title: inputText,
-        content: `안녕하세요. ${inputText}에 대해서 설명해드리겠습니다. ${inputText}은........`,
-      },
-    ]);
+    console.log(response);
+    const data = response.data;
+    if (data) {
+      setResult([
+        {
+          title: inputText,
+          content: data.content,
+        },
+      ]);
+      router.push("?q=" + encodeURIComponent(inputText));
 
-    router.push("?q=" + encodeURIComponent(inputText));
-
-    const timeout = setTimeout(() => {
-      setIsThinking(false);
-    }, 2000);
+      const timeout = setTimeout(() => {
+        setIsThinking(false);
+      }, 2000);
+    }
   };
 
   const copyToClipboard = (content: string) => {
