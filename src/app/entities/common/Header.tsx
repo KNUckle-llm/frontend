@@ -17,7 +17,7 @@ const Header: React.FC<HeaderProps> = ({
   hideBackButton = false,
 }) => {
   return (
-    <header className="border-b border-gray-100 p-4">
+    <header className="max-w-4xl w-full mx-auto border-b border-gray-100 p-4">
       <div className="flex items-center">
         {!hideBackButton && (
           <button

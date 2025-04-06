@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { ChevronLeft } from "lucide-react";
+import Header from "@/app/entities/common/Header";
 
 const SettingsPage = () => {
   const [nickname, setNickname] = useState("");
@@ -11,17 +12,11 @@ const SettingsPage = () => {
       {/* 설정 컨텐츠 영역 */}
       <div className="flex-1 flex flex-col">
         {/* 상단 헤더 */}
-        <div className="border-b border-gray-100 p-4">
-          <div className="flex items-center">
-            <button className="w-8 h-8 flex items-center justify-center mr-2 hover:bg-gray-100 rounded-full">
-              <ChevronLeft size={20} />
-            </button>
-            <h1 className="text-xl font-semibold text-gray-800">설정</h1>
-          </div>
-        </div>
+
+        <Header title={"설정"} icon={<ChevronLeft size={20} />} />
 
         {/* 설정 컨텐츠 */}
-        <div className="flex-1 overflow-auto p-6 max-w-3xl mx-auto w-full">
+        <div className="flex-1 overflow-auto p-6 max-w-4xl mx-auto w-full">
           <div className="space-y-8">
             {/* 프로필 설정 섹션 */}
             <div className="space-y-4">
