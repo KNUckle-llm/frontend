@@ -6,15 +6,16 @@ import { useScrollStore } from "@/app/store/useScrollStore";
 import axios from "axios";
 import { useParams } from "next/navigation";
 import SVGLoadingSpinner from "@/app/entities/loading/SVGLoadingSpinner";
+import { Message } from "@/app/lib/models/thread";
 
 interface IChatResponse {
   title: string;
-  content: string;
+  messages: Message[];
 }
 interface SearchPageProps {}
 
 const SearchPage = ({}: SearchPageProps) => {
-  const [result, setResult] = useState<IChatResponse[]>();
+  const [result, setResult] = useState<IChatResponse>();
   const [showAction, setShowAction] = useState(false);
   const [copyComplete, setCopyComplete] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -29,7 +30,7 @@ const SearchPage = ({}: SearchPageProps) => {
   const getThreadData = async () => {
     const response = await axios.get(`/api/thread/${threadId}`);
     const data = await response.data;
-    setResult([data]);
+    setResult(data);
     setLoading(false);
   };
 
@@ -56,16 +57,16 @@ const SearchPage = ({}: SearchPageProps) => {
     console.log("click relative");
     e.preventDefault();
     if (!relativeQuestion) return;
-    setResult((prev) => [
-      ...(prev || []),
-      {
-        title: relativeQuestion,
-        content: `안녕하세요. ${relativeQuestion}에 대해서 설명해드리겠습니다. ${relativeQuestion}은........`,
-      },
-    ]);
+    // setResult((prev) => [
+    //   ...(prev || []),
+    //   {
+    //     title: relativeQuestion,
+    //     content: `안녕하세요. ${relativeQuestion}에 대해서 설명해드리겠습니다. ${relativeQuestion}은........`,
+    //   },
+    // ]);
   };
 
-  return result && result.length > 0 && !loading ? (
+  return result && result.messages.length > 0 && !loading ? (
     <QuestionThread
       result={result}
       onComplete={() => {

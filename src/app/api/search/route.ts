@@ -28,8 +28,5 @@ export const POST = async (req: Request) => {
   const result = await ThreadModel.create(newThread);
 
   console.log("생성 결과,", result);
-  return Response.json({
-    title: inputText,
-    content: `안녕하세요. ${inputText}에 대해서 설명해드리겠습니다. ${inputText}은........`,
-  });
+  return Response.json(result);
 };

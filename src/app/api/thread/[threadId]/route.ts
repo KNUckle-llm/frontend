@@ -1,15 +1,28 @@
 import { NextRequest } from "next/server";
+import dbConnect from "@/app/api/config/db";
+import { ThreadModel } from "@/app/lib/models/thread";
 
-export const GET = async (
-  req: NextRequest,
-  params: Promise<{ threadId: string }>,
-) => {
-  const { threadId } = await params;
+export const GET = async (req: NextRequest) => {
+  const threadId = req.nextUrl.pathname.split("/").pop();
+  await dbConnect();
 
-  console.log(threadId);
+  const thread = await ThreadModel.findById(threadId);
 
-  return Response.json({
-    title: threadId || "제목",
-    content: `안녕하세요. ${threadId}에 대해서 설명해드리겠습니다. ${threadId}은........`,
-  });
+  if (thread) {
+    return Response.json(thread);
+  } else {
+    return Response.json(
+      {
+        title: "해당 스레드가 존재하지 않습니다.",
+        messages: [
+          {
+            role: "assistant",
+            content: "해당 스레드가 존재하지 않습니다.",
+            createdAt: new Date(),
+          },
+        ],
+      },
+      { status: 404 },
+    );
+  }
 };

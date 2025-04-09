@@ -1,29 +1,31 @@
 import AnimatedText from "@/app/entities/common/AnimatedText";
 import { Button } from "@/components/ui/button";
 import { BookMarked, Copy, CopyCheck, Plus, Share } from "lucide-react";
-import { FormEvent, useRef } from "react";
+import { FormEvent, useRef, useState } from "react";
 import { useScrollStore } from "@/app/store/useScrollStore";
+import { Message } from "@/app/lib/models/thread";
 
 interface IChatResponse {
   title: string;
-  content: string;
+  messages: Message[];
 }
 
 const QuestionThread = (props: {
-  result: IChatResponse[];
+  result: IChatResponse;
   onComplete: () => void;
   showAction: boolean;
   copyComplete: boolean;
   onClick: (content: string) => void;
   onClickRelative: (e: FormEvent, query: string) => void;
 }) => {
+  const [loading, setLoading] = useState();
   const relativeQuestions = [
     "공주대는 어떻게 탄생했나요?",
     "공주대의 캠퍼스에는 어떤 것들이 있나요?",
     "공주대의 학생소식에는 무슨 소식이 올라오나요?",
   ];
 
-  return props.result.map((r, idx) => (
+  return props.result.messages.map((message, idx) => (
     <div
       key={idx}
       className={
@@ -33,10 +35,14 @@ const QuestionThread = (props: {
       <h1
         className={"transition animate-in duration-500 fade-in text-3xl  mb-8"}
       >
-        {r.title}
+        {props.result.title}
       </h1>
       <hr className={"w-full mb-8"} />
-      <AnimatedText text={r.content} speed={10} onComplete={props.onComplete} />
+      <AnimatedText
+        text={message.content}
+        speed={10}
+        onComplete={props.onComplete}
+      />
 
       {props.showAction && (
         <div className={"w-full mt-8"}>
@@ -44,7 +50,7 @@ const QuestionThread = (props: {
           <div className={"flex justify-end gap-2"}>
             <Button
               className={`group hover:cursor-pointer ${props.copyComplete && "bg-green-500/50 hover:bg-green-500/50"}`}
-              onClick={() => props.onClick(r.content)}
+              onClick={() => props.onClick(message.content || "")}
               variant={"ghost"}
             >
               {props.copyComplete ? (
@@ -57,7 +63,7 @@ const QuestionThread = (props: {
               <Share size={8} />
             </Button>
           </div>
-          {idx === props.result.length - 1 && (
+          {idx === props.result.messages.length - 1 && (
             <div
               className={
                 "min-h-[240px] mb-12 transition animate-in duration-500 fade-in"

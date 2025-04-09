@@ -13,17 +13,20 @@ export default function Home() {
   const router = useRouter();
 
   const onSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-    if (!inputText) return;
-    const response = await axios.post("/api/search", { inputText });
-    setIsThinking(true);
-    const data = response.data;
-    if (data) {
-      router.push("search/" + encodeURIComponent(inputText));
+    try {
+      e.preventDefault();
+      if (!inputText) return;
+      const response = await axios.post("/api/search", { inputText });
+      setIsThinking(true);
+      const data = response.data;
 
-      const timeout = setTimeout(() => {
-        setIsThinking(false);
-      }, 2000);
+      if (data) {
+        router.push("search/" + encodeURIComponent(data._id));
+      }
+    } catch (error) {
+      console.error("채팅 전송 실패", error);
+    } finally {
+      setIsThinking(false);
     }
   };
 
