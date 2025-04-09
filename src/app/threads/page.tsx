@@ -1,16 +1,16 @@
 import React from "react";
 import { Search, MoreHorizontal, Plus, Clock, Book } from "lucide-react";
 import Header from "@/app/entities/common/Header";
+import Link from "next/link";
 
 const LibraryPage = () => {
   // 샘플 게시글 데이터
   const posts = [
     {
-      id: 3,
-      title:
-        "nextjs 공식문서에는 public 폴더에 있는 정적 에셋들은 /image.png 이런식으로 접근 가능하다는데...",
+      id: "67f669e1fdc5c857d8df3e5b",
+      title: "소프트웨어학과 4학년 1학기 커리큘럼",
       content:
-        "Next.js 공식 문서에 따르면, public 폴더에 있는 정적 애셋은 루트 경로(/)를 기준으로 접근할 수 있습니다. 예를 들어, public/image.png 파일은 브라우저에서 /image.png로 접근할 수 있어야 합니다. 하지만 해당 방식이 작동하지 않는 경우가 있을 수 있습니다. 이는 주로 Next.js의 설정이나 환경에 따른 문제일 수 있습니다.",
+        "공주대학교의 소프트웨어학과 4학년 1학기 커리큘럼에 대해서 설명드리겠습니다. 공주대의 소프트웨어학과 4학년 1학기 학생은 가상현실, 머신러닝, 정보보안, 캡스톤 디자인1 수업 위주로 강의를 수강하는 것으로 알려져있습니다.",
       timestamp: "2025년 4월 4일",
     },
 
@@ -74,13 +74,14 @@ const LibraryPage = () => {
 
       {/* 메인 컨텐츠 */}
       <main className="max-w-4xl mx-auto px-4 py-4">
-        <div className="space-y-4">
+        <div className="flex flex-col gap-4">
           {posts.map((post) => (
-            <div
+            <Link
+              href={"/search/" + post.id}
               key={post.id}
-              className="bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-sm transition-shadow duration-200"
+              className="w-full h-full bg-white "
             >
-              <div className="p-4">
+              <div className="p-4 border border-gray-200 rounded-lg  overflow-hidden hover:shadow-sm transition-shadow duration-200">
                 <h2 className="text-base font-medium text-gray-900 mb-1">
                   {post.title}
                 </h2>
@@ -97,7 +98,7 @@ const LibraryPage = () => {
                   </button>
                 </div>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </main>
