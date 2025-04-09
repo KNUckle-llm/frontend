@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import SidebarLayout from "@/app/entities/layout/SidebarLayout";
+import { NextAuthProvider } from "@/app/providers";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -37,9 +38,11 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased `}
       >
-        <section className={"w-screen h-screen overflow-x-hidden"}>
-          <SidebarLayout>{children}</SidebarLayout>
-        </section>
+        <NextAuthProvider>
+          <section className={"w-screen h-screen overflow-x-hidden"}>
+            <SidebarLayout>{children}</SidebarLayout>
+          </section>
+        </NextAuthProvider>
       </body>
     </html>
   );
