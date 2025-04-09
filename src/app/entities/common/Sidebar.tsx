@@ -3,11 +3,11 @@ import {
   ArrowRightFromLine,
   Book,
   House,
+  ListPlus,
   MessageSquareText,
   Settings,
 } from "lucide-react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 interface SidebarProps {
@@ -48,22 +48,24 @@ const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
       {isOpen && (
         <div
           className={
-            "flex-grow py-12 flex flex-col gap-4 w-full px-2 py-4 text-neutral-500 font-bold"
+            "flex-grow py-12 flex flex-col gap-4 w-full px-2 text-neutral-500 font-bold"
           }
         >
-          <button
+          <Link
+            href={"/"}
             className={
-              "m-2 p-2 bg-white border hover:border-amber-800 rounded-lg hover:cursor-pointer"
+              "inline-flex justify-center items-center gap-2 m-2 p-2 text-center bg-white border hover:border-amber-800 rounded-lg hover:cursor-pointer"
             }
           >
+            <ListPlus />
             새로운 스레드
-          </button>
+          </Link>
           {routes.map((route) => (
             <Link
               key={route.path}
               href={route.path}
               className={
-                "inline-flex items-center gap-4 p-2 border-none w-full bg-neutral-100 border hover:shadow-lg hover:bg-neutral-100 hover:cursor-pointer  justify-start border-t-0 border-x-0 shadow-none border-b shadow-gray-200 hover:bg-neutral-200/50 rounded-lg "
+                "inline-flex items-center gap-4 p-2 px-3 border-none w-full bg-neutral-100 border hover:shadow-lg hover:cursor-pointer  justify-start border-t-0 border-x-0 shadow-none border-b shadow-gray-200 hover:bg-neutral-200/50 rounded-lg "
               }
             >
               {route.icon}
