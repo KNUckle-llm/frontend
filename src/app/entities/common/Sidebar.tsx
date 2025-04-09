@@ -6,6 +6,7 @@ import {
   ListPlus,
   MessageSquareText,
   Settings,
+  User,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -24,6 +25,7 @@ const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
       path: "/threads",
       icon: <Book size={20} />,
     },
+    { name: "로그인", icon: <User size={20} />, path: "/login" },
     { name: "설정", path: "/settings", icon: <Settings size={20} /> },
   ];
 
