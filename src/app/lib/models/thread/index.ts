@@ -1,32 +1,6 @@
-// types.ts
-export interface Message {
-  id: string;
-  content: string;
-  role: "user" | "assistant";
-  createdAt: Date;
-  attachments?: Attachment[];
-}
-
-export interface Attachment {
-  id: string;
-  type: "image" | "file" | "code";
-  url: string;
-  name?: string;
-}
-
-export interface Thread {
-  id: string;
-  userId: string;
-  title: string;
-  messages: Message[];
-  createdAt: Date;
-  updatedAt: Date;
-  isArchived: boolean;
-  metadata?: Record<string, any>;
-}
-
 // MongoDB 스키마 (mongoose 사용 시)
 import mongoose, { Schema, Document } from "mongoose";
+import { Attachment, Message, Thread } from "@/app/lib/types/thread";
 
 const AttachmentSchema = new Schema({
   type: { type: String, enum: ["image", "file", "code"], required: true },

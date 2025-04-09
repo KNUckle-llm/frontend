@@ -1,5 +1,6 @@
 import dbConnect from "@/app/api/config/db";
-import { Thread, ThreadModel } from "@/app/lib/models/thread";
+import { ThreadModel } from "@/app/lib/models/thread";
+import { Thread } from "@/app/lib/types/thread";
 
 export const POST = async (req: Request) => {
   const { inputText } = await req.json();

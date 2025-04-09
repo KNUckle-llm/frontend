@@ -1,9 +1,8 @@
 import AnimatedText from "@/app/entities/common/AnimatedText";
 import { Button } from "@/components/ui/button";
 import { BookMarked, Copy, CopyCheck, Plus, Share } from "lucide-react";
-import { FormEvent, useRef, useState } from "react";
-import { useScrollStore } from "@/app/store/useScrollStore";
-import { Message } from "@/app/lib/models/thread";
+import { FormEvent, useState } from "react";
+import { Message } from "@/app/lib/types/thread";
 
 interface IChatResponse {
   title: string;

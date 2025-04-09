@@ -6,7 +6,7 @@ import { useScrollStore } from "@/app/store/useScrollStore";
 import axios from "axios";
 import { useParams } from "next/navigation";
 import SVGLoadingSpinner from "@/app/entities/loading/SVGLoadingSpinner";
-import { Message } from "@/app/lib/models/thread";
+import { Message } from "@/app/lib/types/thread";
 
 interface IChatResponse {
   title: string;
