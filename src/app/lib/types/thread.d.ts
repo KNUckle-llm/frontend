@@ -1,10 +1,12 @@
 // types.ts
 export interface Message {
   id: string;
+  session_id: string;
   content: string;
-  role: "user" | "assistant";
+  message_type: "human" | "ai";
   createdAt: Date;
-  attachments?: Attachment[];
+  timestamp: string;
+  additional_data?: Record<string, any>;
 }
 
 export interface Attachment {
