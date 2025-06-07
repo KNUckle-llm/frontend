@@ -1,6 +1,6 @@
 import dbConnect from "@/app/api/config/db";
 import { ThreadModel } from "@/app/lib/models/thread";
-import { Thread } from "@/app/lib/types/thread";
+import { Session } from "@/app/lib/types/thread";
 
 export const POST = async (req: Request) => {
   const { inputText } = await req.json();
@@ -10,7 +10,7 @@ export const POST = async (req: Request) => {
     return Response.json({ message: "입력값이 없습니다." }, { status: 400 });
   }
 
-  const newThread: Omit<Thread, "id"> = {
+  const newThread: Omit<Session, "id"> = {
     title: inputText,
     userId: "user123", // 예시로 고정된 값 사용
     messages: [
