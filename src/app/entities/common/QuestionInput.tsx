@@ -1,31 +1,35 @@
 "use client";
 import { CircleDashed, CornerRightUp } from "lucide-react";
-import { FormEventHandler, useState } from "react";
+import { UseFormRegister } from "react-hook-form";
 
 interface QuestionInputProps {
-  isFocused: boolean;
-  setIsFocused: (isFocused: boolean) => void;
   thinking?: boolean;
-  onSubmit?: FormEventHandler<HTMLFormElement>;
-  inputText: string;
-  setInputText: (inputText: string) => void;
+  handleSubmit: () => void;
+  register: UseFormRegister<any>;
 }
+
 const QuestionInput = ({
-  isFocused,
-  setIsFocused,
   thinking,
-  onSubmit,
-  inputText,
-  setInputText,
+  handleSubmit,
+  register,
 }: QuestionInputProps) => {
   return (
-    <form onSubmit={onSubmit} className={"relative group"}>
+    <form onSubmit={handleSubmit} className={"relative group"}>
       <input
-        value={inputText}
-        onChange={(e) => setInputText(e.target.value)}
-        onFocus={() => setIsFocused(true)}
+        type={"text"}
         className={`w-[480px] h-12 rounded-lg group border p-2 outline-0  focus:px-6 focus:w-[520px] focus:h-16 transition-all duration-300 outline-neutral-300 focus:border-neutral-900  focus:text-xl`}
         placeholder={thinking ? "생각 중이에요.." : "무엇이든 질문하기..."}
+        {...register("question", {
+          required: { value: true, message: "질문을 입력해주세요." },
+          minLength: {
+            value: 2,
+            message: "질문은 최소 2글자 이상이어야 합니다.",
+          },
+          maxLength: {
+            value: 1000,
+            message: "질문은 최대 1000글자까지 입력할 수 있습니다.",
+          },
+        })}
       />
       <button
         className={

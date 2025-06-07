@@ -1,43 +1,40 @@
 "use client";
-import { FormEvent, useState } from "react";
+import { FormEvent, useRef, useState } from "react";
 import QuestionInput from "@/app/entities/common/QuestionInput";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import Footer from "@/app/entities/common/Footer";
 import { v4 as uuidv4 } from "uuid";
+import { useForm } from "react-hook-form";
 
 export default function Home() {
-  const [isFocused, setIsFocused] = useState(false);
   const [isThinking, setIsThinking] = useState(false);
-  const [inputText, setInputText] = useState("");
-
   const router = useRouter();
+  const { register, handleSubmit, watch, reset } = useForm<{
+    question: string;
+  }>();
+  const inputText = useRef("");
+  inputText.current = watch("question") || "";
 
-  const onSubmit = async (e: FormEvent) => {
+  const onSubmit = handleSubmit(async (data: { question: string }) => {
     try {
-      e.preventDefault();
-      if (!inputText) return;
+      const { question } = data;
+      if (!question) return;
+      setIsThinking(true);
       const session_id = uuidv4();
       const serverUrl = process.env.AI_SERVER_URL;
-      const response = await axios.post(
-        `${serverUrl || "http://localhost:8000"}/chat`,
-        {
-          question: inputText,
-          session_id: session_id,
-        },
-      );
-      setIsThinking(true);
-      const data = response.data;
-
-      if (data) {
-        router.push("search/" + session_id);
-      }
+      axios.post(`${serverUrl || "http://localhost:8000"}/chat/stream`, {
+        question: question,
+        session_id: session_id,
+      });
+      reset();
+      router.push("search/" + session_id);
     } catch (error) {
       console.error("채팅 전송 실패", error);
     } finally {
       setIsThinking(false);
     }
-  };
+  });
 
   return (
     <div
@@ -45,12 +42,9 @@ export default function Home() {
     >
       <h1 className={"text-4xl font-extralight mb-8"}>환영합니다.</h1>
       <QuestionInput
-        isFocused={isFocused}
-        setIsFocused={setIsFocused}
         thinking={isThinking}
-        onSubmit={onSubmit}
-        inputText={inputText}
-        setInputText={setInputText}
+        handleSubmit={onSubmit}
+        register={register}
       />
       <Footer />
     </div>

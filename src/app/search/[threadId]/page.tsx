@@ -3,12 +3,10 @@
 import QuestionThread from "@/app/entities/thread/QuestionThread";
 import { FormEvent, RefObject, useEffect, useRef, useState } from "react";
 import { useScrollStore } from "@/app/store/useScrollStore";
-import axios from "axios";
 import { useParams } from "next/navigation";
 import SVGLoadingSpinner from "@/app/entities/loading/SVGLoadingSpinner";
 import { Message } from "@/app/lib/types/thread";
-import { Button } from "@/components/ui/button";
-import { SubmitHandler, useForm, UseFormHandleSubmit } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import InThreadQuestionInput from "@/app/entities/thread/InThreadQuestionInput";
 import useDataFetch, {
   useDataFetchConfig,
