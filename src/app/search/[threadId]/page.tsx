@@ -12,13 +12,16 @@ import { SubmitHandler, useForm, UseFormHandleSubmit } from "react-hook-form";
 import InThreadQuestionInput from "@/app/entities/thread/InThreadQuestionInput";
 
 interface IChatResponse {
-  title: string;
+  session_id: string;
   messages: Message[];
+  last_updated: string;
+  total_messages: number;
+  created_at: string;
 }
 interface SearchPageProps {}
 
 const SearchPage = ({}: SearchPageProps) => {
-  const [result, setResult] = useState<IChatResponse>();
+  const [result, setResult] = useState<IChatResponse | null>(null);
   const [showAction, setShowAction] = useState(false);
   const [copyComplete, setCopyComplete] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -84,6 +87,31 @@ const SearchPage = ({}: SearchPageProps) => {
     if (!question) return;
     setIsThinking(true);
     reset();
+
+    const newMessage: Message = {
+      id: "new",
+      session_id: threadId as string,
+      message_type: "human",
+      content: question,
+      createdAt: new Date(),
+      timestamp: new Date().toISOString(),
+    };
+    setResult((prev) => {
+      if (!prev) {
+        return {
+          session_id: threadId as string,
+          messages: [newMessage],
+          last_updated: new Date().toISOString(),
+          total_messages: 1,
+          created_at: new Date().toISOString(),
+        };
+      } else
+        return {
+          ...prev,
+          messages: [...(prev?.messages || []), newMessage],
+          session_id: prev?.session_id,
+        };
+    });
 
     try {
       const serverUrl = process.env.AI_SERVER_URL || "http://localhost:8000";

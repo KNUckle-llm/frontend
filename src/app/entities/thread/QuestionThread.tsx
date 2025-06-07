@@ -7,7 +7,7 @@ import ChatTools from "@/app/entities/thread/ChatTools";
 import RelativeQuestions from "@/app/entities/thread/RelativeQuestions";
 
 interface IChatResponse {
-  title: string;
+  session_id: string;
   messages: Message[];
 }
 
