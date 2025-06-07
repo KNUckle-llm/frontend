@@ -14,12 +14,8 @@ const InThreadQuestionInput = ({
   isThinking,
 }: InThreadQuestionInputProps) => {
   return (
-    <div className=" bottom-3 mx-auto w-full  max-w-5xl">
-      <div
-        className={
-          "rounded-lg bg-white p-2 m-3 border border-black shadow-md focus:shadow-lg "
-        }
-      >
+    <div className="sticky bottom-3 mx-auto max-w-5xl w-full px-3">
+      <div className="w-full rounded-lg bg-white p-2 border border-black shadow-md focus:shadow-lg">
         <form className="flex items-center gap-2" onSubmit={handleSubmit}>
           <input
             type="text"
