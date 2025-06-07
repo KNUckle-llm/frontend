@@ -15,26 +15,26 @@ const AnimatedText = ({
   onComplete,
   isFinished,
 }: AnimatedTextProps) => {
-  const [displayed, setDisplayed] = useState("");
-
-  useEffect(() => {
-    if (isFinished) {
-      setDisplayed(text);
-      onComplete();
-      return;
-    }
-    let index = text.startsWith(displayed) ? displayed.length : 0;
-    if (!text.startsWith(displayed)) setDisplayed("");
-    const interval = setInterval(() => {
-      index++;
-      setDisplayed(text.slice(0, index));
-      if (index >= text.length) {
-        clearInterval(interval);
-        onComplete();
-      }
-    }, speed);
-    return () => clearInterval(interval);
-  }, [text, speed]);
+  // const [displayed, setDisplayed] = useState("");
+  //
+  // useEffect(() => {
+  //   if (isFinished) {
+  //     setDisplayed(text);
+  //     onComplete();
+  //     return;
+  //   }
+  //   let index = text.startsWith(displayed) ? displayed.length : 0;
+  //   if (!text.startsWith(displayed)) setDisplayed("");
+  //   const interval = setInterval(() => {
+  //     index++;
+  //     setDisplayed(text.slice(0, index));
+  //     if (index >= text.length) {
+  //       clearInterval(interval);
+  //       onComplete();
+  //     }
+  //   }, speed);
+  //   return () => clearInterval(interval);
+  // }, [text, speed]);
 
   return (
     <ReactMarkdown
@@ -49,7 +49,7 @@ const AnimatedText = ({
           <h2 className="text-2xl font-semibold mb-4">{children}</h2>
         ),
         h3: ({ children }) => (
-          <h3 className="text-xl font-semibold mb-2 mb-2">{children}</h3>
+          <h3 className="text-xl font-semibold mb-2">{children}</h3>
         ),
         a: ({ children, href }) => (
           <a
@@ -74,7 +74,7 @@ const AnimatedText = ({
         p: ({ children }) => <p className="mb-4 leading-7">{children}</p>,
       }}
     >
-      {displayed}
+      {text}
     </ReactMarkdown>
   );
 };
