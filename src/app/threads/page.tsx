@@ -1,34 +1,44 @@
+"use client";
+
 import React from "react";
 import { Search, MoreHorizontal, Plus, Clock, Book } from "lucide-react";
 import Header from "@/app/entities/common/Header";
 import Link from "next/link";
+import useDataFetch, {
+  useDataFetchConfig,
+} from "@/app/hooks/common/useDataFetch";
+import SVGLoadingSpinner from "@/app/entities/loading/SVGLoadingSpinner";
+import { Session } from "@/app/lib/types/thread";
+import { exampleSessions } from "@/app/threads/data";
 
 const LibraryPage = () => {
-  // 샘플 게시글 데이터
-  const posts = [
-    {
-      id: "67f669e1fdc5c857d8df3e5b",
-      title: "소프트웨어학과 4학년 1학기 커리큘럼",
-      content:
-        "공주대학교의 소프트웨어학과 4학년 1학기 커리큘럼에 대해서 설명드리겠습니다. 공주대의 소프트웨어학과 4학년 1학기 학생은 가상현실, 머신러닝, 정보보안, 캡스톤 디자인1 수업 위주로 강의를 수강하는 것으로 알려져있습니다.",
-      timestamp: "2025년 4월 4일",
-    },
+  const serverURL = process.env.NEXT_PUBLIC_AI_SERVER_URL;
 
-    {
-      id: 5,
-      title: "개발자를 위한 디자인 시스템 적용 방법",
-      content:
-        "디자인 시스템은 제품의 일관성을 유지하고 개발 속도를 높이는 데 중요한 역할을 합니다. 이 글에서는 개발자 관점에서 디자인 시스템을 효과적으로 프로젝트에 적용하는 방법과 주의사항을 다룹니다. 컴포넌트 기반 아키텍처와 디자인 시스템의 통합 방법, 스타일 가이드 활용법 등을 포함합니다.",
-      timestamp: "2025년 4월 3일",
+  const config: useDataFetchConfig = {
+    url: `${serverURL}/chat/sessions`,
+    method: "GET",
+    config: {
+      params: {
+        limit: 10,
+      },
     },
-    {
-      id: 6,
-      title: "TypeScript에서 유용한 타입 추론 패턴",
-      content:
-        "타입스크립트의 강력한 기능 중 하나는 타입 추론입니다. 이 글에서는 복잡한 타입을 효과적으로 추론하고 활용하는 다양한 패턴에 대해 알아봅니다. 제네릭, 조건부 타입, 인터섹션 타입 등을 활용한 실제 사례와 함께 코드 품질을 높이는 방법을 소개합니다.",
-      timestamp: "2025년 4월 2일",
-    },
-  ];
+  };
+
+  const {
+    data: data,
+    loading,
+    error,
+  } = useDataFetch<{ sessions: Session[] }>(config);
+
+  const sessions = data?.sessions || exampleSessions;
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <SVGLoadingSpinner />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -75,31 +85,35 @@ const LibraryPage = () => {
       {/* 메인 컨텐츠 */}
       <main className="max-w-4xl mx-auto px-4 py-4">
         <div className="flex flex-col gap-4">
-          {posts.map((post) => (
-            <Link
-              href={"/search/" + post.id}
-              key={post.id}
-              className="w-full h-full bg-white "
-            >
-              <div className="p-4 border border-gray-200 rounded-lg  overflow-hidden hover:shadow-sm transition-shadow duration-200">
-                <h2 className="text-base font-medium text-gray-900 mb-1">
-                  {post.title}
-                </h2>
-                <p className="text-sm text-gray-600 mb-2 line-clamp-2">
-                  {post.content}
-                </p>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center text-xs text-gray-500">
-                    <Clock size={14} className="mr-1" />
-                    <span>{post.timestamp}</span>
+          {data &&
+            sessions.map((session) => (
+              <Link
+                href={"/search/" + session.session_id}
+                key={session.session_id}
+                className="w-full h-full bg-white "
+              >
+                <div className="p-4 border border-gray-200 rounded-lg  overflow-hidden hover:shadow-sm transition-shadow duration-200">
+                  <h2 className="text-base font-medium text-gray-900 mb-1">
+                    {session.first_message}
+                  </h2>
+                  <p className="text-sm text-gray-600 mb-2 line-clamp-2">
+                    {session.last_message}
+                  </p>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center text-xs text-gray-500">
+                      <Clock size={14} className="mr-1" />
+                      <span>
+                        {session.last_activity ||
+                          new Date().toLocaleDateString()}
+                      </span>
+                    </div>
+                    <button className="text-gray-400 hover:text-gray-600">
+                      <MoreHorizontal size={16} />
+                    </button>
                   </div>
-                  <button className="text-gray-400 hover:text-gray-600">
-                    <MoreHorizontal size={16} />
-                  </button>
                 </div>
-              </div>
-            </Link>
-          ))}
+              </Link>
+            ))}
         </div>
       </main>
     </div>
