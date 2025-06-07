@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useState } from 'react';
-import axios, { AxiosError, AxiosRequestConfig, Method } from 'axios';
+import { useCallback, useEffect, useState } from "react";
+import axios, { AxiosError, AxiosRequestConfig, Method } from "axios";
 
 export interface useDataFetchConfig<T = any> {
   url: string;
@@ -56,14 +56,14 @@ const useDataFetch = <T = never>({
       }
     } catch (e) {
       if (axios.isAxiosError(e)) {
-        console.error('데이터를 Fetch 하는데에 실패했습니다.', e);
+        console.error("데이터를 Fetch 하는데에 실패했습니다.", e);
         setError(e);
         setLoading(false);
         if (onError) {
           onError(e);
         }
       } else {
-        console.error('Unknown Error:', e);
+        console.error("Unknown Error:", e);
       }
     }
   }, [url, ...dependencies]);
