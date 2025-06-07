@@ -4,6 +4,7 @@ import QuestionInput from "@/app/entities/common/QuestionInput";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import Footer from "@/app/entities/common/Footer";
+import { v4 as uuidv4 } from "uuid";
 
 export default function Home() {
   const [isFocused, setIsFocused] = useState(false);
@@ -16,12 +17,20 @@ export default function Home() {
     try {
       e.preventDefault();
       if (!inputText) return;
-      const response = await axios.post("/api/search", { inputText });
+      const session_id = uuidv4();
+      const serverUrl = process.env.AI_SERVER_URL;
+      const response = await axios.post(
+        `${serverUrl || "http://localhost:8000"}/chat`,
+        {
+          question: inputText,
+          session_id: session_id,
+        },
+      );
       setIsThinking(true);
       const data = response.data;
 
       if (data) {
-        router.push("search/" + encodeURIComponent(data._id));
+        router.push("search/" + session_id);
       }
     } catch (error) {
       console.error("채팅 전송 실패", error);
