@@ -8,7 +8,7 @@ import { useParams } from "next/navigation";
 import SVGLoadingSpinner from "@/app/entities/loading/SVGLoadingSpinner";
 import { Message } from "@/app/lib/types/thread";
 import { Button } from "@/components/ui/button";
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm, UseFormHandleSubmit } from "react-hook-form";
 import InThreadQuestionInput from "@/app/entities/thread/InThreadQuestionInput";
 
 interface IChatResponse {
@@ -29,6 +29,7 @@ const SearchPage = ({}: SearchPageProps) => {
     handleSubmit,
     register,
     watch,
+    reset,
     formState: { errors },
   } = useForm();
 
@@ -75,11 +76,14 @@ const SearchPage = ({}: SearchPageProps) => {
   };
 
   // Form
-  const onSubmit = async (data: { question: string }) => {
+  const onSubmit: (data: { question: string }) => Promise<any> = async (data: {
+    question: string;
+  }) => {
     const { question } = data;
 
     if (!question) return;
     setIsThinking(true);
+    reset();
 
     try {
       const serverUrl = process.env.AI_SERVER_URL || "http://localhost:8000";
@@ -119,7 +123,11 @@ const SearchPage = ({}: SearchPageProps) => {
   }
 
   return result && result.messages.length > 0 && !loading ? (
-    <section className={"relative flex flex-col"}>
+    <section
+      className={
+        "relative w-full h-full flex flex-col items-center justify-between"
+      }
+    >
       <QuestionThread
         result={result}
         onComplete={() => {
@@ -133,7 +141,7 @@ const SearchPage = ({}: SearchPageProps) => {
       />
       <InThreadQuestionInput
         isThinking={isThinking}
-        handleSubmit={handleSubmit(onSubmit)}
+        handleSubmit={handleSubmit(onSubmit as SubmitHandler<any>)}
         register={register}
       />
     </section>
