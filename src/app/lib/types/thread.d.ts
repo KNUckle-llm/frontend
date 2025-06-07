@@ -16,13 +16,10 @@ export interface Attachment {
   name?: string;
 }
 
-export interface Thread {
-  id: string;
-  userId: string;
-  title: string;
-  messages: Message[];
-  createdAt: Date;
-  updatedAt: Date;
-  isArchived: boolean;
-  metadata?: Record<string, any>;
+export interface Session {
+  session_id: string;
+  message_count: number;
+  first_message: string;
+  last_message: string;
+  last_activity: number;
 }

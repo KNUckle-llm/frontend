@@ -1,6 +1,6 @@
 // MongoDB 스키마 (mongoose 사용 시)
 import mongoose, { Schema, Document } from "mongoose";
-import { Attachment, Message, Thread } from "@/app/lib/types/thread";
+import { Attachment, Message, Session } from "@/app/lib/types/thread";
 
 const AttachmentSchema = new Schema({
   type: { type: String, enum: ["image", "file", "code"], required: true },
@@ -27,7 +27,7 @@ const ThreadSchema = new Schema({
 
 export const ThreadModel =
   mongoose.models.Thread ||
-  mongoose.model<Thread & Document>("Thread", ThreadSchema);
+  mongoose.model<Session & Document>("Thread", ThreadSchema);
 
 export const MessageModel =
   mongoose.models.Message ||
