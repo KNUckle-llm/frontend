@@ -1,7 +1,7 @@
 import AnimatedText from "@/app/entities/common/AnimatedText";
 import { Button } from "@/components/ui/button";
 import { BookMarked, Copy, CopyCheck, Plus, Share } from "lucide-react";
-import { FormEvent, useState } from "react";
+import { FormEvent, RefObject, useEffect, useRef, useState } from "react";
 import { Message } from "@/app/lib/types/thread";
 import ChatTools from "@/app/entities/thread/ChatTools";
 import RelativeQuestions from "@/app/entities/thread/RelativeQuestions";
@@ -18,12 +18,15 @@ const QuestionThread = (props: {
   copyComplete: boolean;
   onClick: (content: string) => void;
   onClickRelative: (e: FormEvent, query: string) => void;
+  scrollToEnd: (ref: RefObject<HTMLDivElement>) => void;
+  isStreaming?: boolean;
 }) => {
   const relativeQuestions = [
     "공주대는 어떻게 탄생했나요?",
     "공주대의 캠퍼스에는 어떤 것들이 있나요?",
     "공주대의 학생소식에는 무슨 소식이 올라오나요?",
   ];
+  const questionEndRef = useRef<HTMLDivElement>(null);
 
   const renderQuestion = (message: Message) => {
     return (
@@ -56,6 +59,16 @@ const QuestionThread = (props: {
     );
   };
 
+  useEffect(() => {
+    if (
+      questionEndRef.current !== null &&
+      props.result.messages.length > 0 &&
+      props.isStreaming
+    ) {
+      props.scrollToEnd(questionEndRef as RefObject<HTMLDivElement>);
+    }
+  }, [props.isStreaming, props.result.messages.length]);
+
   return (
     <div
       className={
@@ -66,10 +79,19 @@ const QuestionThread = (props: {
         <div
           key={message.id}
           className={`${message.message_type === "human" ? "pt-8 pb-0" : "pt-0 pb-8"} w-full`}
+          ref={idx === props.result.messages.length - 2 ? questionEndRef : null}
         >
           {renderQuestion(message)}
           {renderAnswer(message, idx !== props.result.messages.length - 1)}
-
+          {idx === props.result.messages.length - 1 &&
+            message.message_type === "human" && (
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="text-sm text-gray-500">답변 준비 중...</span>
+                  <div className="w-3 h-3 bg-yellow-950 rounded-full animate-pulse"></div>
+                </div>
+              </div>
+            )}
           {props.showAction && message.message_type === "ai" && (
             <div className={"w-full mt-8"}>
               <ChatTools
