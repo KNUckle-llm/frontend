@@ -1,0 +1,28 @@
+{
+  "question": "공주대 천안캠퍼스의 공학관은 어디어디가 있는지?",
+  "timestamp": "2025-06-06T23:02:38.061906",
+  "responses": {
+    "jongho": {
+      "name": "jongho hyeong prompt",
+      "response": "해당 질문에 대한 공식 문서나 파일이 없습니다.  \n출처:  \n  - 파일명: 해당 정보 없음  \n  - 부서/학과: 해당 정보 없음  \n  - URL: 해당 정보 없음  ",
+      "response_time": 2.133655,
+      "success": true,
+      "character_count": 96,
+      "timestamp": "2025-06-06T23:02:38.061947"
+    },
+    "user_focused": {
+      "name": "User Experience Optimized",
+      "response": "안녕하세요! 공주대 천안캠퍼스의 공학관에 대한 정보를 제공해 드리겠습니다.\n\n천안캠퍼스에는 여러 개의 공학관이 있으며, 주요 공학관은 다음과 같습니다:\n\n1. **6공학관**: 이곳은 동아리 홍보전과 같은 다양한 행사들이 열리는 장소입니다.\n2. **10공학관**: 여러 학과와 연구실이 위치해 있으며, 학생들이 수업을 듣는 공간입니다.\n\n이 외에도 다른 공학관이 있을 수 있으니, 특정 학과나 시설에 대한 정보가 필요하시면 말씀해 주세요!\n\n📚 **참고 정보:**\n- 문서: [2025학년도 1학기 동아리 홍보전 관련 문서]\n- 출처 부서: 국립공주대학교 국문 대표\n\n더 궁금한 점이 있으시면 언제든지 질문해 주세요!",
+      "response_time": 5.251101,
+      "success": true,
+      "character_count": 346,
+      "timestamp": "2025-06-06T23:02:40.195682"
+    }
+  },
+  "summary": {
+    "total_variants": 2,
+    "successful_responses": 2,
+    "failed_responses": 0,
+    "success_rate": 100.0
+  }
+}
