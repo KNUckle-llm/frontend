@@ -68,11 +68,15 @@ const useDataFetch = <T = never>({
     }
   }, [url, ...dependencies]);
 
+  const refetch = useCallback(() => {
+    fetchData();
+  }, [fetchData]);
+
   useEffect(() => {
     fetchData();
   }, [fetchData]);
 
-  return { data, loading, error };
+  return { data, loading, error, refetch };
 };
 
 export default useDataFetch;
