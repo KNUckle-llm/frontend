@@ -1,7 +1,14 @@
 "use client";
 
 import QuestionThread from "@/app/entities/thread/QuestionThread";
-import { FormEvent, RefObject, useEffect, useRef, useState } from "react";
+import React, {
+  FormEvent,
+  RefObject,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+import { ErrorBoundary, FallbackProps } from "react-error-boundary";
 import { useScrollStore } from "@/app/store/useScrollStore";
 import { useParams } from "next/navigation";
 import SVGLoadingSpinner from "@/app/entities/loading/SVGLoadingSpinner";
@@ -201,7 +208,9 @@ const SearchPage = ({}: SearchPageProps) => {
     }
     abortControllerRef.current = new AbortController();
 
+    scrollToBottom();
     setIsThinking(true);
+
     reset();
 
     // 🔥 사용자 질문 메시지 추가
@@ -372,39 +381,53 @@ const SearchPage = ({}: SearchPageProps) => {
   }
 
   if (streamingState.error) {
-    return (
-      <div className="p-12 w-full h-full flex items-center justify-center">
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
-          <strong>오류:</strong> {streamingState.error}
-        </div>
-      </div>
-    );
+    return <ErrorBox error={streamingState.error} />;
   }
 
-  return result && result.messages.length > 0 && !loading ? (
-    <section className={"relative mx-auto max-w-5xl w-full"}>
-      <QuestionThread
-        result={result}
-        onComplete={() => {
-          setShowAction(true);
-        }}
-        showAction={showAction}
-        copyComplete={copyComplete}
-        onClick={copyToClipboard}
-        onClickRelative={onClickRelative}
-        scrollToEnd={scrollToEnd}
-        isStreaming={streamingState.isStreaming}
-      />
+  return (
+    <ErrorBoundary fallback={<ErrorBox />}>
+      {result && result.messages.length > 0 && !loading ? (
+        <section className={"relative mx-auto max-w-5xl w-full"}>
+          <QuestionThread
+            result={result}
+            onComplete={() => {
+              setShowAction(true);
+            }}
+            showAction={showAction}
+            copyComplete={copyComplete}
+            onClick={copyToClipboard}
+            onClickRelative={onClickRelative}
+            scrollToEnd={scrollToEnd}
+            isStreaming={streamingState.isStreaming}
+          />
 
-      <InThreadQuestionInput
-        isThinking={isThinking || streamingState.isStreaming}
-        handleSubmit={handleSubmit(onSubmit as SubmitHandler<any>)}
-        register={register}
-      />
-    </section>
-  ) : (
-    <div className={"py-12"}>
-      <SVGLoadingSpinner />
+          <InThreadQuestionInput
+            isThinking={isThinking || streamingState.isStreaming}
+            handleSubmit={handleSubmit(onSubmit as SubmitHandler<any>)}
+            register={register}
+          />
+        </section>
+      ) : (
+        <div className={"py-12"}>
+          <SVGLoadingSpinner />
+        </div>
+      )}
+    </ErrorBoundary>
+  );
+};
+
+const ErrorBox = ({ error, resetErrorBoundary }: Partial<FallbackProps>) => {
+  return (
+    <div className="p-12 w-full h-full flex flex-col items-center justify-center">
+      <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+        <strong>예기치 않은 오류가 발생했습니다.</strong> {error}
+      </div>
+      <button
+        className="mt-4 px-4 py-2 bg-green-800 text-white rounded hover:bg-green-700 cursor-pointer"
+        onClick={resetErrorBoundary}
+      >
+        다시 시도하기
+      </button>
     </div>
   );
 };

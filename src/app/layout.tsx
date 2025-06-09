@@ -38,11 +38,11 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased `}
       >
-        <NextAuthProvider>
-          <section className={"w-screen h-screen overflow-x-hidden"}>
-            <SidebarLayout>{children}</SidebarLayout>
-          </section>
-        </NextAuthProvider>
+        {/*<NextAuthProvider>*/}
+        <section className={"w-screen h-screen overflow-x-hidden"}>
+          <SidebarLayout>{children}</SidebarLayout>
+        </section>
+        {/*</NextAuthProvider>*/}
       </body>
     </html>
   );
