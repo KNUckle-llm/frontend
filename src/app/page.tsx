@@ -1,5 +1,5 @@
 "use client";
-import { FormEvent, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import QuestionInput from "@/app/entities/common/QuestionInput";
 import { useRouter } from "next/navigation";
 import axios from "axios";

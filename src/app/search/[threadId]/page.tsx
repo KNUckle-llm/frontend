@@ -1,7 +1,14 @@
 "use client";
 
 import QuestionThread from "@/app/entities/thread/QuestionThread";
-import { FormEvent, RefObject, useEffect, useRef, useState } from "react";
+import React, {
+  FormEvent,
+  RefObject,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+import { ErrorBoundary, FallbackProps } from "react-error-boundary";
 import { useScrollStore } from "@/app/store/useScrollStore";
 import { useParams } from "next/navigation";
 import SVGLoadingSpinner from "@/app/entities/loading/SVGLoadingSpinner";
@@ -38,6 +45,7 @@ const SearchPage = ({}: SearchPageProps) => {
   const [isThinking, setIsThinking] = useState(false);
   const abortControllerRef = useRef<AbortController | null>(null);
 
+  // 🔥 스트리밍 상태를 별도로 관리
   const [streamingState, setStreamingState] = useState({
     isStreaming: false,
     currentResponse: "",
@@ -173,13 +181,31 @@ const SearchPage = ({}: SearchPageProps) => {
     threadId,
   ]);
 
-  // 스트리밍 완료 시 최종 메시지 업데이트
   useEffect(() => {
     if (
       !streamingState.isStreaming &&
       streamingState.streamingMessageId &&
       streamingState.currentResponse
     ) {
+      setResult((prev) => {
+        if (!prev) return null;
+
+        const updatedMessages = prev.messages.map((msg) => {
+          if (msg.id === streamingState.streamingMessageId) {
+            return {
+              ...msg,
+              content: streamingState.currentResponse,
+            };
+          }
+          return msg;
+        });
+
+        return {
+          ...prev,
+          messages: updatedMessages,
+        };
+      });
+
       // 스트리밍 상태 초기화
       setStreamingState({
         isStreaming: false,
@@ -192,7 +218,6 @@ const SearchPage = ({}: SearchPageProps) => {
     streamingState.isStreaming,
     streamingState.streamingMessageId,
     streamingState.currentResponse,
-    refetch,
   ]);
 
   type onSubmitProps = (
@@ -225,8 +250,9 @@ const SearchPage = ({}: SearchPageProps) => {
     }
     abortControllerRef.current = new AbortController();
 
-    setIsThinking(true);
     scrollToBottom();
+    setIsThinking(true);
+    reset();
 
     // 🔥 사용자 질문 메시지 추가 (낙관적 업데이트)
     const userMessage: Message = {
@@ -303,6 +329,7 @@ const SearchPage = ({}: SearchPageProps) => {
           if (line.startsWith("data: ")) {
             try {
               const data: StreamingMessage = JSON.parse(line.slice(6));
+              console.log("스트리밍 데이터:", data);
 
               switch (data.type) {
                 case "start":
@@ -400,30 +427,54 @@ const SearchPage = ({}: SearchPageProps) => {
   }
 
   if (streamingState.error) {
-    return (
-      <div className="p-12 w-full h-full flex items-center justify-center">
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
-          <strong>오류:</strong> {streamingState.error}
-        </div>
-      </div>
-    );
+    return <ErrorBox error={streamingState.error} />;
   }
 
   return (
-    <section className={"relative mx-auto max-w-5xl w-full"}>
-      <QuestionThread
-        result={result!}
-        onComplete={() => {
-          setShowAction(true);
-        }}
-        showAction={showAction}
-        copyComplete={copyComplete}
-        onClick={copyToClipboard}
-        onClickRelative={onClickRelative}
-        scrollToEnd={scrollToEnd}
-        isStreaming={streamingState.isStreaming}
-      />
+    <ErrorBoundary fallback={<ErrorBox />}>
+      {result && result.messages.length > 0 && !loading ? (
+        <section className={"relative mx-auto max-w-5xl w-full"}>
+          <QuestionThread
+            result={result}
+            onComplete={() => {
+              setShowAction(true);
+            }}
+            showAction={showAction}
+            copyComplete={copyComplete}
+            onClick={copyToClipboard}
+            onClickRelative={onClickRelative}
+            scrollToEnd={scrollToEnd}
+            isStreaming={streamingState.isStreaming}
+          />
 
+          <InThreadQuestionInput
+            isThinking={isThinking || streamingState.isStreaming}
+            handleSubmit={handleSubmit(onSubmit as SubmitHandler<any>)}
+            register={register}
+          />
+        </section>
+      ) : (
+        <div className={"py-12"}>
+          <SVGLoadingSpinner />
+        </div>
+      )}
+    </ErrorBoundary>
+  );
+};
+
+const ErrorBox = ({ error, resetErrorBoundary }: Partial<FallbackProps>) => {
+  return (
+    <div className="p-12 w-full h-full flex flex-col items-center justify-center">
+      <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+        <strong>예기치 않은 오류가 발생했습니다.</strong> {error}
+      </div>
+      <button
+        className="mt-4 px-4 py-2 bg-green-800 text-white rounded hover:bg-green-700 cursor-pointer"
+        onClick={resetErrorBoundary}
+      >
+        다시 시도하기
+      </button>
+    </div>
       <InThreadQuestionInput
         isThinking={isThinking}
         handleSubmit={handleSubmit(onSubmit as SubmitHandler<any>)}
