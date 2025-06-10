@@ -6,6 +6,7 @@ import axios from "axios";
 import Footer from "@/app/entities/common/Footer";
 import { v4 as uuidv4 } from "uuid";
 import { useForm } from "react-hook-form";
+import useSearchStore from "@/app/store/useSearchStore";
 
 export default function Home() {
   const [isThinking, setIsThinking] = useState(false);
@@ -13,6 +14,7 @@ export default function Home() {
   const { register, handleSubmit, watch, reset } = useForm<{
     question: string;
   }>();
+  const { setSearchQuery, setIsSearching, setSessionId } = useSearchStore();
   const inputText = useRef("");
   inputText.current = watch("question") || "";
 
@@ -21,12 +23,11 @@ export default function Home() {
       const { question } = data;
       if (!question) return;
       setIsThinking(true);
+      // 세션 아이디 생성 후 전역상태로 저장 후 이동
       const session_id = uuidv4();
-      const serverUrl = process.env.AI_SERVER_URL;
-      axios.post(`${serverUrl || "http://localhost:8000"}/chat/stream`, {
-        question: question,
-        session_id: session_id,
-      });
+      setSearchQuery(question);
+      setIsSearching(true);
+      setSessionId(session_id);
       reset();
       router.push("search/" + session_id);
     } catch (error) {

@@ -11,6 +11,7 @@ import InThreadQuestionInput from "@/app/entities/thread/InThreadQuestionInput";
 import useDataFetch, {
   useDataFetchConfig,
 } from "@/app/hooks/common/useDataFetch";
+import useSearchStore from "@/app/store/useSearchStore";
 
 interface ISessionResponse {
   session_id: string;
@@ -35,8 +36,8 @@ const SearchPage = ({}: SearchPageProps) => {
   const [showAction, setShowAction] = useState(false);
   const [copyComplete, setCopyComplete] = useState(false);
   const [isThinking, setIsThinking] = useState(false);
+  const abortControllerRef = useRef<AbortController | null>(null);
 
-  // 🔥 스트리밍 상태를 별도로 관리
   const [streamingState, setStreamingState] = useState({
     isStreaming: false,
     currentResponse: "",
@@ -44,8 +45,15 @@ const SearchPage = ({}: SearchPageProps) => {
     error: null as string | null,
   });
 
-  const messagesEndRef = useRef<HTMLDivElement>(null);
-  const abortControllerRef = useRef<AbortController | null>(null);
+  const searchStore = useSearchStore((state) => state);
+  const {
+    setIsSearching,
+    searchQuery,
+    isSearching,
+    sessionId,
+    setSearchQuery,
+    setSessionId,
+  } = searchStore;
 
   const {
     handleSubmit,
@@ -73,6 +81,23 @@ const SearchPage = ({}: SearchPageProps) => {
 
   const { loading, error, refetch } =
     useDataFetch<ISessionResponse>(getThreadDataConfig);
+
+  // 메인페이지에서 가져온 검색어에 대한 요청
+  useEffect(() => {
+    const search = async () => {
+      if (!searchQuery || !sessionId || loading) return;
+      if (searchQuery && sessionId === threadId && isSearching && !loading) {
+        console.log("메인 페이지 최초 검색 실행", searchQuery);
+        setIsSearching(false);
+
+        // onSubmit 함수 호출 (낙관적 업데이트는 onSubmit 내부에서 처리)
+        await onSubmit({ question: searchQuery }, true);
+        setSearchQuery("");
+        setSessionId("");
+      }
+    };
+    search();
+  }, [loading]);
 
   const scrollToBottom = () => {
     if (mainRef && mainRef.current) {
@@ -148,31 +173,13 @@ const SearchPage = ({}: SearchPageProps) => {
     threadId,
   ]);
 
+  // 스트리밍 완료 시 최종 메시지 업데이트
   useEffect(() => {
     if (
       !streamingState.isStreaming &&
       streamingState.streamingMessageId &&
       streamingState.currentResponse
     ) {
-      setResult((prev) => {
-        if (!prev) return null;
-
-        const updatedMessages = prev.messages.map((msg) => {
-          if (msg.id === streamingState.streamingMessageId) {
-            return {
-              ...msg,
-              content: streamingState.currentResponse,
-            };
-          }
-          return msg;
-        });
-
-        return {
-          ...prev,
-          messages: updatedMessages,
-        };
-      });
-
       // 스트리밍 상태 초기화
       setStreamingState({
         isStreaming: false,
@@ -185,15 +192,32 @@ const SearchPage = ({}: SearchPageProps) => {
     streamingState.isStreaming,
     streamingState.streamingMessageId,
     streamingState.currentResponse,
+    refetch,
   ]);
 
-  // Form submit 함수
-  const onSubmit: (data: { question: string }) => Promise<any> = async (data: {
-    question: string;
-  }) => {
-    const { question } = data;
+  type onSubmitProps = (
+    data: { question: string },
+    isMain?: boolean,
+  ) => Promise<any>;
 
-    if (!question.trim()) return;
+  // Form submit 함수
+  const onSubmit: onSubmitProps = async (
+    data: { question: string },
+    isMain,
+  ) => {
+    let { question } = data;
+
+    // 메인 페이지에서 온 경우 searchQuery 사용
+    if (isMain && searchQuery) {
+      question = searchQuery.trim();
+    }
+
+    if (!question || !question.trim()) return;
+
+    // 폼 리셋 (일반 submit의 경우만)
+    if (!isMain) {
+      reset();
+    }
 
     // 이전 요청 취소
     if (abortControllerRef.current) {
@@ -202,9 +226,9 @@ const SearchPage = ({}: SearchPageProps) => {
     abortControllerRef.current = new AbortController();
 
     setIsThinking(true);
-    reset();
+    scrollToBottom();
 
-    // 🔥 사용자 질문 메시지 추가
+    // 🔥 사용자 질문 메시지 추가 (낙관적 업데이트)
     const userMessage: Message = {
       id: `user_${Date.now()}`,
       session_id: threadId as string,
@@ -214,8 +238,11 @@ const SearchPage = ({}: SearchPageProps) => {
       timestamp: new Date().toISOString(),
     };
 
+    console.log("낙관적인 유저의 질문 업데이트", userMessage);
+
     setResult((prev) => {
       if (!prev) {
+        console.log("세션 정보 없음 - 새로운 세션 생성");
         return {
           session_id: threadId as string,
           messages: [userMessage],
@@ -227,6 +254,7 @@ const SearchPage = ({}: SearchPageProps) => {
         return {
           ...prev,
           messages: [...prev.messages, userMessage],
+          total_messages: prev.total_messages + 1,
         };
       }
     });
@@ -275,7 +303,6 @@ const SearchPage = ({}: SearchPageProps) => {
           if (line.startsWith("data: ")) {
             try {
               const data: StreamingMessage = JSON.parse(line.slice(6));
-              console.log("스트리밍 데이터:", data);
 
               switch (data.type) {
                 case "start":
@@ -287,6 +314,7 @@ const SearchPage = ({}: SearchPageProps) => {
                     streamingMessageId,
                     error: null,
                   });
+                  setIsThinking(false); // 스트리밍 시작되면 thinking 상태 해제
                   console.log("스트리밍 시작:", data.timestamp);
                   break;
 
@@ -381,10 +409,10 @@ const SearchPage = ({}: SearchPageProps) => {
     );
   }
 
-  return result && result.messages.length > 0 && !loading ? (
+  return (
     <section className={"relative mx-auto max-w-5xl w-full"}>
       <QuestionThread
-        result={result}
+        result={result!}
         onComplete={() => {
           setShowAction(true);
         }}
@@ -397,15 +425,11 @@ const SearchPage = ({}: SearchPageProps) => {
       />
 
       <InThreadQuestionInput
-        isThinking={isThinking || streamingState.isStreaming}
+        isThinking={isThinking}
         handleSubmit={handleSubmit(onSubmit as SubmitHandler<any>)}
         register={register}
       />
     </section>
-  ) : (
-    <div className={"py-12"}>
-      <SVGLoadingSpinner />
-    </div>
   );
 };
 
