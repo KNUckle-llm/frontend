@@ -3,6 +3,7 @@ import {
   ArrowRightFromLine,
   Book,
   House,
+  Info,
   ListPlus,
   MessageSquareText,
   Settings,
@@ -19,6 +20,7 @@ const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
   const openStyle = isOpen ? "w-64" : "w-18";
   const routes = [
     { name: "홈", path: "/", icon: <House size={20} /> },
+    { name: "서비스 소개", path: "/intro", icon: <Info size={20} /> },
     { name: "소식", path: "/news", icon: <MessageSquareText size={20} /> },
     {
       name: "라이브러리",
