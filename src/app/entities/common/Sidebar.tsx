@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import {
   ArrowRightFromLine,
-  Book,
+  BookOpen,
   House,
   Info,
   ListPlus,
@@ -24,9 +24,9 @@ const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
     { name: "서비스 소개", path: "/intro", icon: <Info size={20} /> },
     // { name: "소식", path: "/news", icon: <MessageSquareText size={20} /> },
     {
-      name: "라이브러리",
+      name: "이전에 나눈 대화들",
       path: "/threads",
-      icon: <Book size={20} />,
+      icon: <BookOpen size={20} />,
     },
     { name: "로그인", icon: <User size={20} />, path: "/login" },
     { name: "설정", path: "/settings", icon: <Settings size={20} /> },
