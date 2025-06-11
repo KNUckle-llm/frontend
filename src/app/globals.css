@@ -38,6 +38,83 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+
+  /* 커스텀 컬러 팔레트 추가 */
+  /* Warm Red 팔레트 */
+  --color-warm-red-50: #fff5f5;
+  --color-warm-red-100: #ffe3e3;
+  --color-warm-red-200: #ffcccc;
+  --color-warm-red-300: #ffb3b3;
+  --color-warm-red-400: #ff8080;
+  --color-warm-red-500: #ff4e45;
+  --color-warm-red-600: #e63946;
+  --color-warm-red-700: #cc2a36;
+  --color-warm-red-800: #b31e29;
+  --color-warm-red-900: #99141c;
+
+  /* Outer Space 팔레트 */
+  --color-outer-space-50: #f8f9fb;
+  --color-outer-space-100: #e8e9f0;
+  --color-outer-space-200: #d1d4e0;
+  --color-outer-space-300: #a8afcc;
+  --color-outer-space-400: #7a85b3;
+  --color-outer-space-500: #56619a;
+  --color-outer-space-600: #3f4a81;
+  --color-outer-space-700: #2a2d47;
+  --color-outer-space-800: #1f1f3a;
+  --color-outer-space-900: #0f0f23;
+
+  /* Perfect White 팔레트 */
+  --color-perfect-white-50: #ffffff;
+  --color-perfect-white-100: #fefefe;
+  --color-perfect-white-200: #fdfdfd;
+  --color-perfect-white-300: #fcfcfc;
+  --color-perfect-white-400: #fbfbfb;
+  --color-perfect-white-500: #fafafa;
+  --color-perfect-white-600: #f5f5f5;
+  --color-perfect-white-700: #f0f0f0;
+  --color-perfect-white-800: #ebebeb;
+  --color-perfect-white-900: #e6e6e6;
+
+  /* 편의성 별칭 - Primary (Warm Red) */
+  --color-theme-primary-50: #fff5f5;
+  --color-theme-primary-100: #ffe3e3;
+  --color-theme-primary-200: #ffcccc;
+  --color-theme-primary-300: #ffb3b3;
+  --color-theme-primary-400: #ff8080;
+  --color-theme-primary-500: #ff4e45;
+  --color-theme-primary-600: #e63946;
+  --color-theme-primary-700: #cc2a36;
+  --color-theme-primary-800: #b31e29;
+  --color-theme-primary-900: #99141c;
+
+  /* 편의성 별칭 - Secondary (Outer Space) */
+  --color-theme-secondary-50: #f8f9fb;
+  --color-theme-secondary-100: #e8e9f0;
+  --color-theme-secondary-200: #d1d4e0;
+  --color-theme-secondary-300: #a8afcc;
+  --color-theme-secondary-400: #7a85b3;
+  --color-theme-secondary-500: #56619a;
+  --color-theme-secondary-600: #3f4a81;
+  --color-theme-secondary-700: #2a2d47;
+  --color-theme-secondary-800: #1f1f3a;
+  --color-theme-secondary-900: #0f0f23;
+
+  /* 배경 전용 컬러 */
+  --color-bg-dark: #0f0f23;
+  --color-bg-darker: #1f1f3a;
+  --color-bg-darkest: #2a2d47;
+
+  /* 커스텀 애니메이션 */
+  --animate-float: float 20s infinite ease-in-out;
+  --animate-particle-float: particle-float 15s infinite ease-in-out;
+  --animate-pulse-glow: pulse-glow 4s ease-in-out infinite;
+  --animate-float-gentle: float-gentle 3s ease-in-out infinite;
+  --animate-pulse-dot: pulse-dot 1.5s ease-in-out infinite;
+  --animate-slide-in-left: slide-in-left 0.8s ease-out;
+  --animate-slide-in-right: slide-in-right 0.8s ease-out;
+  --animate-fade-in-up: fade-in-up 0.8s ease-out;
+  --animate-grow: grow 0.5s ease-in-out;
 }
 
 :root {
