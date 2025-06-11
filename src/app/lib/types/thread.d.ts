@@ -23,3 +23,11 @@ export interface Session {
   last_message: string;
   last_activity: number;
 }
+
+export interface ISessionResponse {
+  session_id: string;
+  messages: Message[];
+  last_updated: string;
+  total_messages: number;
+  created_at: string;
+}
