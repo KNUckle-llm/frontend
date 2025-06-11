@@ -22,7 +22,7 @@ const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
   const routes = [
     { name: "홈", path: "/", icon: <House size={20} /> },
     { name: "서비스 소개", path: "/intro", icon: <Info size={20} /> },
-    { name: "소식", path: "/news", icon: <MessageSquareText size={20} /> },
+    // { name: "소식", path: "/news", icon: <MessageSquareText size={20} /> },
     {
       name: "라이브러리",
       path: "/threads",
@@ -38,7 +38,7 @@ const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
       className={`flex flex-col justify-between items-center flex-shrink-0 transition-all duration-300 ${openStyle} h-full bg-neutral-100 py-2 px-1`}
     >
       <div className={"w-full flex py-4 justify-center gap-4 items-center"}>
-        <Link href={"/"}>
+        <Link href={"/"} onClick={() => setIsOpen(true)}>
           <Image
             src={"/assets/logo.png"}
             width={300}
@@ -60,7 +60,7 @@ const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
           <Link
             href={"/"}
             className={
-              "inline-flex justify-center items-center gap-2 m-2 p-2 text-center bg-white border hover:border-warm-red-500 hover:bg-warm-red-200/80 duration-300 transition-colors rounded-lg hover:cursor-pointer"
+              "inline-flex justify-center items-center gap-2 m-2 p-2 text-center bg-white border hover:border-outer-space-500 hover:bg-outer-space-200/80 hover:text-black duration-300 transition-colors rounded-lg hover:cursor-pointer"
             }
           >
             <ListPlus />
