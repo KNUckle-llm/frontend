@@ -274,7 +274,7 @@ const useStreaming = ({
     // });
 
     addMessageToResult(userMessage);
-    scrollToBottom();
+    setTimeout(scrollToBottom, 100);
 
     try {
       console.log("🚀 스트리밍 요청 시작:", question);
