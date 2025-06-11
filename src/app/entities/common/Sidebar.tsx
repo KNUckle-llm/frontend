@@ -51,33 +51,30 @@ const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
           <span className={"text-nowrap  text-2xl font-light"}>KNUckle</span>
         )}
       </div>
-      {isOpen && (
-        <div
-          className={
-            "flex-grow py-12 flex flex-col gap-4 w-full px-2 text-neutral-500 font-bold"
-          }
+      <div
+        className={
+          "flex-grow py-12 flex flex-col gap-4 w-full px-2 text-neutral-500 font-bold"
+        }
+      >
+        <Link
+          href={"/"}
+          className={`inline-flex justify-center items-center gap-2 m-2 p-2 text-center bg-white border hover:border-outer-space-500 hover:bg-outer-space-200/80 hover:text-black duration-300 transition-colors rounded-lg hover:cursor-pointer ${!isOpen && "invisible text-nowrap"} text-nowrap line-clamp-1`}
         >
+          <ListPlus />
+          새로운 스레드
+        </Link>
+        {routes.map((route) => (
           <Link
-            href={"/"}
-            className={
-              "inline-flex justify-center items-center gap-2 m-2 p-2 text-center bg-white border hover:border-outer-space-500 hover:bg-outer-space-200/80 hover:text-black duration-300 transition-colors rounded-lg hover:cursor-pointer"
-            }
+            key={route.path}
+            href={route.path}
+            className={`inline-flex items-center gap-4 p-2 px-3 border-none w-full border hover:shadow-lg hover:cursor-pointer  justify-start border-t-0 border-x-0 shadow-none border-b shadow-gray-200   rounded-lg text-nowrap line-clamp-1 ${path === route.path ? "bg-outer-space-400 text-white" : "hover:bg-outer-space-200/50 hover:text-neutral-500"}`}
           >
-            <ListPlus />
-            새로운 스레드
+            {route.icon}
+            {isOpen && route.name}
           </Link>
-          {routes.map((route) => (
-            <Link
-              key={route.path}
-              href={route.path}
-              className={`inline-flex items-center gap-4 p-2 px-3 border-none w-full border hover:shadow-lg hover:cursor-pointer  justify-start border-t-0 border-x-0 shadow-none border-b shadow-gray-200   rounded-lg ${path === route.path ? "bg-outer-space-400 text-white" : "hover:bg-outer-space-200/50 hover:text-neutral-500"}`}
-            >
-              {route.icon}
-              {route.name}
-            </Link>
-          ))}
-        </div>
-      )}
+        ))}
+      </div>
+
       <div
         className={
           "border-t px-2 py-4 w-full flex flex-col justify-center items-stretch"
