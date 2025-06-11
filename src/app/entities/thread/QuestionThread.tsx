@@ -72,7 +72,7 @@ const QuestionThread = (props: {
   return (
     <div
       className={
-        "max-w-5xl mx-auto w-full flex flex-col items-start justify-start p-10 overflow-y-scroll"
+        "max-w-5xl mx-auto w-full flex flex-1 flex-col items-start justify-start p-10 overflow-y-scroll"
       }
       ref={questionEndRef}
     >
@@ -84,14 +84,7 @@ const QuestionThread = (props: {
           {renderQuestion(message)}
           {renderAnswer(message, idx !== props.result.messages.length - 1)}
           {idx === props.result.messages.length - 1 &&
-            message.message_type === "human" && (
-              <div>
-                <div className="flex items-center gap-2">
-                  <span className="text-sm text-gray-500">답변 준비 중...</span>
-                  <div className="w-3 h-3 bg-yellow-950 rounded-full animate-pulse"></div>
-                </div>
-              </div>
-            )}
+            message.message_type === "human" && <PulseIndicator />}
           {props.showAction && message.message_type === "ai" && (
             <div className={"w-full mt-8"}>
               <ChatTools
@@ -108,6 +101,17 @@ const QuestionThread = (props: {
           )}
         </div>
       ))}
+    </div>
+  );
+};
+
+const PulseIndicator = () => {
+  return (
+    <div>
+      <div className="flex items-center gap-2">
+        <span className="text-sm text-gray-500">답변 준비 중...</span>
+        <div className="w-3 h-3 bg-warm-red-700 rounded-full animate-pulse"></div>
+      </div>
     </div>
   );
 };
