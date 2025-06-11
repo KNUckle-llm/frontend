@@ -37,11 +37,40 @@ export default function Home() {
     }
   });
 
+  const welcomeMessages = {
+    morning: {
+      time: "morning",
+      messages: ["좋은 아침입니다."],
+    },
+    afternoon: {
+      time: "afternoon",
+      messages: ["좋은 오후입니다."],
+    },
+    evening: {
+      time: "evening",
+      messages: ["좋은 저녁입니다."],
+    },
+  };
+
+  const currentHour = new Date().getHours();
+
+  const getWelcomeMessage = () => {
+    if (currentHour >= 6 && currentHour < 12) {
+      return welcomeMessages.morning.messages[0];
+    } else if (currentHour >= 12 && currentHour < 18) {
+      return welcomeMessages.afternoon.messages[0];
+    } else {
+      return welcomeMessages.evening.messages[0];
+    }
+  };
+
   return (
     <div
       className={"relative h-full flex flex-col items-center justify-center"}
     >
-      <h1 className={"text-4xl font-extralight mb-8"}>환영합니다.</h1>
+      <h1 className={"text-4xl xl:text-5xl 2xl:text-6xl font-extralight mb-8"}>
+        {getWelcomeMessage() || "환영합니다."}
+      </h1>
       <QuestionInput
         thinking={isThinking}
         handleSubmit={onSubmit}
