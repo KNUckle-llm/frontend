@@ -64,8 +64,8 @@ const SearchPage = ({}: SearchPageProps) => {
 
   const scrollToBottom = () => {
     if (mainRef && mainRef.current) {
-      mainRef.current?.scrollTo({
-        top: mainRef.current.scrollHeight + 200,
+      mainRef.current?.children[0]?.children[0].scrollTo({
+        top: mainRef.current?.children[0]?.children[0].scrollHeight,
         behavior: "smooth",
       });
     }
@@ -105,30 +105,6 @@ const SearchPage = ({}: SearchPageProps) => {
     if (!relativeQuestion) return;
   };
 
-  // useEffect(() => {
-  //   if (initialStat && isThinking) {
-  //     setResult((prev) => {
-  //       if (!prev) {
-  //         console.log("세션 정보 없음 - 새로운 세션 생성");
-  //         return {
-  //           session_id: threadId as string,
-  //           messages: [initialStat],
-  //           last_updated: new Date().toISOString(),
-  //           total_messages: 1,
-  //           created_at: new Date().toISOString(),
-  //         };
-  //       } else {
-  //         return {
-  //           ...prev,
-  //           messages: [...prev.messages, initialStat],
-  //           total_messages: prev.total_messages + 1,
-  //         };
-  //       }
-  //     });
-  //     setInitialStat(null);
-  //   }
-  // }, [initialStat, isThinking]);
-
   if (loading) {
     return (
       <div className={"p-12 w-full h-full flex items-center justify-center"}>
@@ -154,7 +130,10 @@ const SearchPage = ({}: SearchPageProps) => {
 
   return (
     <ErrorBoundary fallback={<ErrorBox />}>
-      <section className={"relative mx-auto max-w-5xl w-full"}>
+      <section
+        suppressHydrationWarning={true}
+        className={"relative flex flex-col h-full mx-auto max-w-5xl w-full"}
+      >
         <QuestionThread
           result={result!}
           onComplete={() => {
@@ -170,7 +149,7 @@ const SearchPage = ({}: SearchPageProps) => {
 
         <InThreadQuestionInput
           isThinking={isThinking || streamingState.isStreaming}
-          handleSubmit={handleSubmit(onSubmit as SubmitHandler<IData>)}
+          handleSubmit={handleSubmit(onSubmit as SubmitHandler<any>)}
           register={register}
         />
       </section>

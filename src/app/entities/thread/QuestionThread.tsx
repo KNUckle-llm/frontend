@@ -72,14 +72,14 @@ const QuestionThread = (props: {
   return (
     <div
       className={
-        "max-w-5xl mx-auto w-full flex flex-col items-start justify-start p-10"
+        "max-w-5xl mx-auto w-full flex flex-col items-start justify-start p-10 overflow-y-scroll"
       }
+      ref={questionEndRef}
     >
       {props.result.messages.map((message, idx) => (
         <div
           key={message.id}
           className={`${message.message_type === "human" ? "pt-8 pb-0" : "pt-0 pb-8"} w-full`}
-          ref={idx === props.result.messages.length - 2 ? questionEndRef : null}
         >
           {renderQuestion(message)}
           {renderAnswer(message, idx !== props.result.messages.length - 1)}

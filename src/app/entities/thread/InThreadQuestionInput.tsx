@@ -3,7 +3,7 @@ import { UseFormHandleSubmit, UseFormRegister } from "react-hook-form";
 import { CircleDashed, CornerRightUp } from "lucide-react";
 
 interface InThreadQuestionInputProps {
-  handleSubmit: () => void;
+  handleSubmit: () => Promise<void>;
   register: UseFormRegister<any>;
   isThinking: boolean;
 }
@@ -14,7 +14,7 @@ const InThreadQuestionInput = ({
   isThinking,
 }: InThreadQuestionInputProps) => {
   return (
-    <div className="sticky bottom-3 mx-auto max-w-5xl w-full px-3">
+    <div className=" mx-auto max-w-5xl w-full m-3">
       <div className="w-full rounded-lg bg-white p-2 border border-black shadow-md focus:shadow-lg">
         <form className="flex items-center gap-2" onSubmit={handleSubmit}>
           <input
