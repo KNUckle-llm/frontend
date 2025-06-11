@@ -8,7 +8,7 @@ interface SidebarLayoutProps {
 }
 
 const SidebarLayout = ({ children }: SidebarLayoutProps) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
   const mainRef = useRef<HTMLDivElement>(null);
   const setMainRef = useScrollStore((state) => state.setMainRef);
 

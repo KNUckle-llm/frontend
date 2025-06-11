@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -30,6 +31,7 @@ const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
     { name: "로그인", icon: <User size={20} />, path: "/login" },
     { name: "설정", path: "/settings", icon: <Settings size={20} /> },
   ];
+  const path = usePathname();
 
   return (
     <nav
@@ -58,7 +60,7 @@ const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
           <Link
             href={"/"}
             className={
-              "inline-flex justify-center items-center gap-2 m-2 p-2 text-center bg-white border hover:border-amber-800 rounded-lg hover:cursor-pointer"
+              "inline-flex justify-center items-center gap-2 m-2 p-2 text-center bg-white border hover:border-warm-red-500 hover:bg-warm-red-200/80 duration-300 transition-colors rounded-lg hover:cursor-pointer"
             }
           >
             <ListPlus />
@@ -68,9 +70,7 @@ const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
             <Link
               key={route.path}
               href={route.path}
-              className={
-                "inline-flex items-center gap-4 p-2 px-3 border-none w-full bg-neutral-100 border hover:shadow-lg hover:cursor-pointer  justify-start border-t-0 border-x-0 shadow-none border-b shadow-gray-200 hover:bg-neutral-200/50 rounded-lg "
-              }
+              className={`inline-flex items-center gap-4 p-2 px-3 border-none w-full border hover:shadow-lg hover:cursor-pointer  justify-start border-t-0 border-x-0 shadow-none border-b shadow-gray-200   rounded-lg ${path === route.path ? "bg-outer-space-400 text-white" : "hover:bg-outer-space-200/50 hover:text-neutral-500"}`}
             >
               {route.icon}
               {route.name}
