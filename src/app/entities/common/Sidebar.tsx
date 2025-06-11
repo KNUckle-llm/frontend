@@ -77,12 +77,20 @@ const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
 
       <div
         className={
-          "border-t px-2 py-4 w-full flex flex-col justify-center items-stretch"
+          "border-t px-2 py-4 w-full flex flex-col justify-center items-end"
         }
       >
-        <Button className={""} onClick={() => setIsOpen(!isOpen)}>
-          <ArrowRightFromLine className={`${isOpen && `rotate-180`}`} />
-        </Button>
+        <button
+          className={
+            "bg-transparent w-8 text-black hover:text-neutral-700 cursor-pointer"
+          }
+          onClick={() => setIsOpen(!isOpen)}
+        >
+          <ArrowRightFromLine
+            size={20}
+            className={`${isOpen && `rotate-180`}`}
+          />
+        </button>
       </div>
     </nav>
   );
