@@ -1,6 +1,4 @@
 import AnimatedText from "@/app/entities/common/AnimatedText";
-import { Button } from "@/components/ui/button";
-import { BookMarked, Copy, CopyCheck, Plus, Share } from "lucide-react";
 import { FormEvent, RefObject, useEffect, useRef, useState } from "react";
 import { Message } from "@/app/lib/types/thread";
 import ChatTools from "@/app/entities/thread/ChatTools";
@@ -14,8 +12,6 @@ interface IChatResponse {
 
 const QuestionThread = (props: {
   result: IChatResponse;
-  onComplete: () => void;
-  showAction: boolean;
   copyComplete: boolean;
   onClick: (content: string) => void;
   onClickRelative: (e: FormEvent, query: string) => void;
@@ -53,7 +49,6 @@ const QuestionThread = (props: {
         <AnimatedText
           text={message.content}
           speed={10}
-          onComplete={props.onComplete}
           isFinished={isFinished || false}
         />
       )
@@ -89,7 +84,7 @@ const QuestionThread = (props: {
             {renderAnswer(message, idx !== props.result.messages.length - 1)}
             {idx === props.result.messages.length - 1 &&
               message.message_type === "human" && <PulseIndicator />}
-            {props.showAction && message.message_type === "ai" && (
+            {!props.isStreaming && message.message_type === "ai" && (
               <div className={"w-full mt-8"}>
                 <ChatTools
                   copyComplete={props.copyComplete}

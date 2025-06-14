@@ -29,6 +29,7 @@ interface useStreamingProps {
   setInitialStat: (message: Message) => void;
   loading?: boolean;
   resetForm: () => void;
+  onCompleteStreaming?: () => void;
 }
 
 const useStreaming = ({
@@ -38,6 +39,7 @@ const useStreaming = ({
   setInitialStat,
   loading,
   resetForm,
+  onCompleteStreaming,
 }: useStreamingProps) => {
   const [isThinking, setIsThinking] = useState(false);
   const abortControllerRef = useRef<AbortController | null>(null);
@@ -315,6 +317,7 @@ const useStreaming = ({
       }
     } finally {
       setIsThinking(false);
+      if (onCompleteStreaming) onCompleteStreaming();
     }
   };
 

@@ -30,9 +30,7 @@ interface IData {
 
 const SearchPage = ({}: SearchPageProps) => {
   const [result, setResult] = useState<ISessionResponse | null>(null);
-  const [showAction, setShowAction] = useState(false);
   const [copyComplete, setCopyComplete] = useState(false);
-  // const [isThinking, setIsThinking] = useState(false);
 
   // Form
   const {
@@ -72,6 +70,10 @@ const SearchPage = ({}: SearchPageProps) => {
     }
   };
 
+  const onCompleteStreaming = () => {
+    scrollToBottom();
+  };
+
   const { onSubmit, streamingState, isThinking } = useStreaming({
     setResult,
     scrollToBottom,
@@ -79,6 +81,7 @@ const SearchPage = ({}: SearchPageProps) => {
     loading,
     resetForm: reset,
     threadId: threadId as string,
+    onCompleteStreaming,
   });
 
   const scrollToEnd = (ref: RefObject<HTMLDivElement>) => {
@@ -104,6 +107,9 @@ const SearchPage = ({}: SearchPageProps) => {
   const onClickRelative = (e: FormEvent, relativeQuestion: string) => {
     e.preventDefault();
     if (!relativeQuestion) return;
+
+    reset({ question: relativeQuestion });
+    onSubmit({ question: relativeQuestion });
   };
 
   if (loading) {
@@ -134,10 +140,6 @@ const SearchPage = ({}: SearchPageProps) => {
       >
         <QuestionThread
           result={result!}
-          onComplete={() => {
-            setShowAction(true);
-          }}
-          showAction={showAction}
           copyComplete={copyComplete}
           onClick={copyToClipboard}
           onClickRelative={onClickRelative}

@@ -16,7 +16,7 @@ const RelativeQuestions = ({
     isLast && (
       <div
         className={
-          "min-h-[240px] mb-12 transition animate-in duration-500 fade-in"
+          "min-h-[160px] mb-4 transition animate-in duration-500 fade-in"
         }
       >
         <h3 className={"inline-flex items-center font-bold gap-2 mt-8"}>

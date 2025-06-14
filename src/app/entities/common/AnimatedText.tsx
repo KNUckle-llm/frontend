@@ -5,7 +5,7 @@ import remarkGfm from "remark-gfm";
 interface AnimatedTextProps {
   text: string;
   speed: number;
-  onComplete: () => void;
+  onComplete?: () => void;
   isFinished?: boolean;
 }
 
