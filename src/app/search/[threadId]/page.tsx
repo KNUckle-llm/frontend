@@ -108,7 +108,6 @@ const SearchPage = ({}: SearchPageProps) => {
     e.preventDefault();
     if (!relativeQuestion) return;
 
-    reset({ question: relativeQuestion });
     onSubmit({ question: relativeQuestion });
   };
 
