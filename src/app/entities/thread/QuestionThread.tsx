@@ -5,6 +5,7 @@ import { FormEvent, RefObject, useEffect, useRef, useState } from "react";
 import { Message } from "@/app/lib/types/thread";
 import ChatTools from "@/app/entities/thread/ChatTools";
 import RelativeQuestions from "@/app/entities/thread/RelativeQuestions";
+import PulseIndicator from "@/app/entities/loading/PulseIndicator";
 
 interface IChatResponse {
   session_id: string;
@@ -76,42 +77,35 @@ const QuestionThread = (props: {
       }
       ref={questionEndRef}
     >
-      {props.result.messages.map((message, idx) => (
-        <div
-          key={message.id}
-          className={`${message.message_type === "human" ? "pt-8 pb-0" : "pt-0 pb-8"} w-full`}
-        >
-          {renderQuestion(message)}
-          {renderAnswer(message, idx !== props.result.messages.length - 1)}
-          {idx === props.result.messages.length - 1 &&
-            message.message_type === "human" && <PulseIndicator />}
-          {props.showAction && message.message_type === "ai" && (
-            <div className={"w-full mt-8"}>
-              <ChatTools
-                copyComplete={props.copyComplete}
-                onCopyClick={props.onClick}
-                content={message.content || ""}
-              />
-              <RelativeQuestions
-                isLast={idx === props.result.messages.length - 1}
-                onClickRelative={props.onClickRelative}
-                relativeQuestions={relativeQuestions}
-              />
-            </div>
-          )}
-        </div>
-      ))}
-    </div>
-  );
-};
-
-const PulseIndicator = () => {
-  return (
-    <div>
-      <div className="flex items-center gap-2">
-        <span className="text-sm text-gray-500">답변 준비 중...</span>
-        <div className="w-3 h-3 bg-warm-red-700 rounded-full animate-pulse"></div>
-      </div>
+      {props.result.messages.map((message, idx) => {
+        if (message.message_type !== "human" && message.message_type !== "ai")
+          return null;
+        return (
+          <div
+            key={message.id}
+            className={`${message.message_type === "human" ? "pt-8 pb-0" : "pt-0 pb-8"} w-full`}
+          >
+            {renderQuestion(message)}
+            {renderAnswer(message, idx !== props.result.messages.length - 1)}
+            {idx === props.result.messages.length - 1 &&
+              message.message_type === "human" && <PulseIndicator />}
+            {props.showAction && message.message_type === "ai" && (
+              <div className={"w-full mt-8"}>
+                <ChatTools
+                  copyComplete={props.copyComplete}
+                  onCopyClick={props.onClick}
+                  content={message.content || ""}
+                />
+                <RelativeQuestions
+                  isLast={idx === props.result.messages.length - 1}
+                  onClickRelative={props.onClickRelative}
+                  relativeQuestions={relativeQuestions}
+                />
+              </div>
+            )}
+          </div>
+        );
+      })}
     </div>
   );
 };

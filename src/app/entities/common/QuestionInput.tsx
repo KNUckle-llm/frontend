@@ -17,7 +17,8 @@ const QuestionInput = ({
     <form onSubmit={handleSubmit} className={"relative group"}>
       <input
         type={"text"}
-        className={`w-[480px] h-12 rounded-lg group border p-2 outline-0  focus:px-6 focus:w-[520px] focus:h-16 transition-all duration-300 outline-neutral-300 focus:border-neutral-900  focus:text-xl`}
+        className={`w-[480px] h-12 rounded-lg group border p-2 outline-0  focus:px-6 focus:w-[520px] focus:h-16 transition-all duration-300 outline-neutral-300 focus:border-neutral-900  focus:text-xl `}
+        autoComplete={"off"}
         placeholder={thinking ? "생각 중이에요.." : "무엇이든 질문하기..."}
         {...register("question", {
           required: { value: true, message: "질문을 입력해주세요." },

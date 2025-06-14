@@ -20,6 +20,7 @@ import useDataFetch, {
 } from "@/app/hooks/common/useDataFetch";
 import ErrorBox from "@/app/entities/error/ErrorBox";
 import useStreaming from "@/app/hooks/chat/useStreaming";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface SearchPageProps {}
 
@@ -107,19 +108,16 @@ const SearchPage = ({}: SearchPageProps) => {
 
   if (loading) {
     return (
-      <div className={"p-12 w-full h-full flex items-center justify-center"}>
-        <div
-          className={
-            "bg-neutral-800 rounded-lg flex flex-col items-center justify-center gap-4 p-8 text-white"
-          }
-        >
-          <div className={"w-1/3 animate-pulse"}>
-            <SVGLoadingSpinner className={""} />
-          </div>
-          <span className={"text-xl text-center animate-pulse "}>
-            답변을 준비하는 중입니다.
-          </span>
-        </div>
+      <div
+        className={
+          "max-w-5xl mx-auto w-full flex flex-1 flex-col items-start justify-start p-10 overflow-y-scroll"
+        }
+      >
+        <Skeleton className={"h-10 w-1/3 mb-4 mt-8"} />
+        <hr className={"w-full mb-8"} />
+        <Skeleton className={"h-4 w-1/2 mb-6 pb-8"} />
+        <Skeleton className={"h-4 w-2/3 mb-6 pb-8"} />
+        <Skeleton className={"h-4 w-1/4 mb-6 pb-8"} />
       </div>
     );
   }

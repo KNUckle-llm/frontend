@@ -20,6 +20,7 @@ const InThreadQuestionInput = ({
           <input
             type="text"
             placeholder="이 스레드에 추가 질문하기..."
+            autoComplete={"off"}
             className="flex-1 px-4 py-2 rounded-md focus:outline-none focus:ring-1 focus:ring-neutral-300"
             {...register("question", {
               required: { value: true, message: "질문을 입력해주세요." },

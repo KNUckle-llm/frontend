@@ -24,7 +24,7 @@ const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
     { name: "서비스 소개", path: "/intro", icon: <Info size={20} /> },
     // { name: "소식", path: "/news", icon: <MessageSquareText size={20} /> },
     {
-      name: "이전에 나눈 대화들",
+      name: "이전 대화 목록",
       path: "/threads",
       icon: <BookOpen size={20} />,
     },

@@ -489,3 +489,7 @@ body {
   height: 100%;
 }
 
+
+nextjs-portal {
+  display: none;
+}

@@ -244,35 +244,8 @@ const useStreaming = ({
     abortControllerRef.current = new AbortController();
 
     resetForm();
-
     const userMessage: Message = createOptimisticMessage(question);
-
-    if (searchQuery) {
-      setInitialStat(userMessage);
-    }
-
     setIsThinking(true);
-    console.log("낙관적인 유저의 질문 업데이트", userMessage);
-
-    // setResult((prev) => {
-    //   if (!prev) {
-    //     console.log("세션 정보 없음 - 새로운 세션 생성");
-    //     return {
-    //       session_id: threadId as string,
-    //       messages: [userMessage],
-    //       last_updated: new Date().toISOString(),
-    //       total_messages: 1,
-    //       created_at: new Date().toISOString(),
-    //     };
-    //   } else {
-    //     return {
-    //       ...prev,
-    //       messages: [...prev.messages, userMessage],
-    //       total_messages: prev.total_messages + 1,
-    //     };
-    //   }
-    // });
-
     addMessageToResult(userMessage);
     setTimeout(scrollToBottom, 100);
 
