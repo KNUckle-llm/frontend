@@ -13,12 +13,16 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+import { signOut } from "next-auth/react";
+import useAuthStore from "@/app/store/useAuthStore";
+
 interface SidebarProps {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
 }
 const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
   const openStyle = isOpen ? "w-64" : "w-18";
+  const { isLoggedIn } = useAuthStore();
   const routes = [
     { name: "홈", path: "/", icon: <House size={20} /> },
     { name: "서비스 소개", path: "/intro", icon: <Info size={20} /> },
@@ -28,7 +32,9 @@ const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
       path: "/threads",
       icon: <BookOpen size={20} />,
     },
-    { name: "로그인", icon: <User size={20} />, path: "/login" },
+    isLoggedIn
+      ? { name: "로그아웃", icon: <User size={20} />, onClick: () => signOut() }
+      : { name: "로그인", icon: <User size={20} />, path: "/login" },
     { name: "설정", path: "/settings", icon: <Settings size={20} /> },
   ];
   const path = usePathname();
@@ -63,16 +69,30 @@ const Sidebar = ({ isOpen, setIsOpen }: SidebarProps) => {
           <ListPlus />
           새로운 스레드
         </Link>
-        {routes.map((route) => (
-          <Link
-            key={route.path}
-            href={route.path}
-            className={`inline-flex items-center gap-4 p-2 px-3 border-none w-full border hover:shadow-lg hover:cursor-pointer  justify-start border-t-0 border-x-0 shadow-none border-b shadow-gray-200   rounded-lg text-nowrap line-clamp-1 ${path === route.path ? "bg-outer-space-400 text-white" : "hover:bg-outer-space-200/50 hover:text-neutral-500"}`}
-          >
-            {route.icon}
-            {isOpen && route.name}
-          </Link>
-        ))}
+        {routes.map((route) => {
+          if (route.path) {
+            return (
+              <Link
+                key={route.name}
+                href={route.path}
+                className={`inline-flex items-center gap-4 p-2 px-3 border-none w-full border hover:shadow-lg hover:cursor-pointer  justify-start border-t-0 border-x-0 shadow-none border-b shadow-gray-200   rounded-lg text-nowrap line-clamp-1 ${path === route.path ? "bg-outer-space-400 text-white" : "hover:bg-outer-space-200/50 hover:text-neutral-500"}`}
+              >
+                {route.icon}
+                {isOpen && route.name}
+              </Link>
+            );
+          }
+          return (
+            <button
+              key={route.name}
+              onClick={route.onClick}
+              className={`inline-flex items-center gap-4 p-2 px-3 border-none w-full border hover:shadow-lg hover:cursor-pointer  justify-start border-t-0 border-x-0 shadow-none border-b shadow-gray-200   rounded-lg text-nowrap line-clamp-1 hover:bg-outer-space-200/50 hover:text-neutral-500`}
+            >
+              {route.icon}
+              {isOpen && route.name}
+            </button>
+          );
+        })}
       </div>
 
       <div

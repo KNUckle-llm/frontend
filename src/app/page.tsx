@@ -8,6 +8,8 @@ import { v4 as uuidv4 } from "uuid";
 import { useForm } from "react-hook-form";
 import useSearchStore from "@/app/store/useSearchStore";
 
+import { useSession } from "next-auth/react";
+
 export default function Home() {
   const [isThinking, setIsThinking] = useState(false);
   const router = useRouter();
@@ -15,6 +17,7 @@ export default function Home() {
     question: string;
   }>();
   const { setSearchQuery, setIsSearching, setSessionId } = useSearchStore();
+  const { data: session } = useSession();
   const inputText = useRef("");
   inputText.current = watch("question") || "";
 
@@ -55,13 +58,17 @@ export default function Home() {
   const currentHour = new Date().getHours();
 
   const getWelcomeMessage = () => {
-    if (currentHour >= 6 && currentHour < 12) {
-      return welcomeMessages.morning.messages[0];
-    } else if (currentHour >= 12 && currentHour < 18) {
-      return welcomeMessages.afternoon.messages[0];
-    } else {
-      return welcomeMessages.evening.messages[0];
-    }
+    const userName = session?.user?.name;
+    const baseMessage = (() => {
+      if (currentHour >= 6 && currentHour < 12) {
+        return welcomeMessages.morning.messages[0];
+      } else if (currentHour >= 12 && currentHour < 18) {
+        return welcomeMessages.afternoon.messages[0];
+      } else {
+        return welcomeMessages.evening.messages[0];
+      }
+    })();
+    return userName ? `${userName}님, ${baseMessage}` : baseMessage;
   };
 
   return (
