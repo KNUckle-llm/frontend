@@ -15,6 +15,10 @@ import ServerErrorFallback from "@/app/entities/error/ServerErrorFallback";
 const LibraryPage = () => {
   const serverURL = process.env.NEXT_PUBLIC_AI_SERVER_URL;
 
+  if (!serverURL) {
+    console.error("서버 URL 환경변수가 설정되지 않았습니다!!");
+  }
+
   const config: useDataFetchConfig = {
     url: `${serverURL}/chat/sessions`,
     method: "GET",
