@@ -25,7 +25,7 @@ const useDataFetch = <T = never>({
   dependencies = [],
 }: useDataFetchConfig<T>) => {
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<AxiosError | Error | null>(null);
+  const [error, setError] = useState<AxiosError | null>(null);
   const [data, setData] = useState<T | null>();
 
   const axiosConfig: AxiosRequestConfig = {

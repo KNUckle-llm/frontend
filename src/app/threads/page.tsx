@@ -10,6 +10,7 @@ import useDataFetch, {
 import SVGLoadingSpinner from "@/app/entities/loading/SVGLoadingSpinner";
 import { Session } from "@/app/lib/types/thread";
 import { exampleSessions } from "@/app/threads/data";
+import ServerErrorFallback from "@/app/entities/error/ServerErrorFallback";
 
 const LibraryPage = () => {
   const serverURL = process.env.NEXT_PUBLIC_AI_SERVER_URL;
@@ -84,6 +85,9 @@ const LibraryPage = () => {
 
       {/* 메인 컨텐츠 */}
       <main className="max-w-4xl mx-auto px-4 py-4">
+        {error && (
+          <ServerErrorFallback status={Number(error.status ?? 0) ?? 0} />
+        )}
         <div className="flex flex-col gap-4">
           {data &&
             sessions.map((session) => (
